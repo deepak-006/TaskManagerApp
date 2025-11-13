@@ -1,0 +1,175 @@
+<div class="admin-container container mt-4">
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+      <h2 class="mb-0">Admin Dashboard</h2>
+      <h5 class="text-primary mt-1">Welcome, {{ userName }} </h5>
+    </div>
+
+    <button class="btn btn-outline-secondary" (click)="logout()">
+      <i class="bi bi-box-arrow-right"></i> Logout
+    </button>
+  </div>
+
+
+  <!-- ✅ Feedback Message -->
+  <div *ngIf="message" class="alert"
+       [ngClass]="{
+         'alert-success': messageType === 'success',
+         'alert-danger': messageType === 'error'
+       }">
+    {{ message }}
+  </div>
+
+  <!-- ✅ Summary Cards -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-3 col-sm-6"
+         *ngFor="let card of summaryCards"
+         (click)="showView(card.type)">
+      <div class="card summary-card shadow-sm text-center"
+           [ngClass]="{ 'active-card': activeView === card.type }">
+        <div class="card-body">
+          <i [class]="card.icon"></i>
+          <h5 class="mt-2">{{ card.title }}</h5>
+          <p class="fs-5 fw-semibold text-dark mb-0">
+            {{ card.value || 0 }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ✅ USERS TABLE -->
+  <div *ngIf="activeView === 'users'" class="card mb-4 shadow-sm">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">User Management</h5>
+        <button class="btn btn-sm btn-primary" (click)="refreshUsers()">
+          <i class="bi bi-arrow-clockwise"></i> Refresh
+        </button>
+      </div>
+
+      <div *ngIf="users.length > 0; else noUsers">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of users; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ user.firstName }} {{ user.lastName }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                  <span class="badge"
+                        [ngClass]="{
+                          'bg-success': user.role === 'Admin',
+                          'bg-info': user.role === 'User'
+                        }">
+                    {{ user.role }}
+                  </span>
+                </td>
+                <td>
+                  <button class="btn btn-sm btn-warning me-2"
+                          (click)="changeRole(user)">
+                    <i class="bi bi-shield-lock"></i> Change Role
+                  </button>
+                  <button class="btn btn-sm btn-danger"
+                          (click)="deleteUser(user.id)">
+                    <i class="bi bi-trash"></i> Delete
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <ng-template #noUsers>
+        <p class="text-muted text-center">No users found.</p>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- ✅ TASKS TABLE -->
+  <div *ngIf="activeView !== 'users'" class="card mb-4 shadow-sm">
+    <div class="card-body">
+      <h5 class="mb-3">
+        {{
+          activeView === 'allTasks'
+            ? 'All Tasks'
+            : activeView === 'completedTasks'
+            ? 'Completed Tasks'
+            : 'Pending Tasks'
+        }}
+      </h5>
+
+      <div *ngIf="filteredTasks.length > 0; else noTasks">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Priority</th>
+                <th>Due Date</th>
+                <th>Assigned To</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let task of filteredTasks; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ task.title }}</td>
+                <td>
+                  <span class="badge"
+                        [ngClass]="{
+                          'bg-success': task.status === 'Completed',
+                          'bg-warning text-dark': task.status === 'Pending',
+                          'bg-info text-dark': task.status === 'In Progress'
+                        }">
+                    {{ task.status }}
+                  </span>
+                </td>
+                <td>{{ task.priority }}</td>
+                <td>{{ task.dueDate | date: 'mediumDate' }}</td>
+                <td>{{ task.assignedToName || 'Unassigned' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <ng-template #noTasks>
+        <p class="text-muted text-center">No tasks available.</p>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- ✅ ACTIVITY LOGS -->
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">Recent Activity Logs</h5>
+        <button class="btn btn-sm btn-outline-primary" (click)="loadLogs()">
+          <i class="bi bi-arrow-clockwise"></i> Refresh
+        </button>
+      </div>
+
+      <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center"
+            *ngFor="let log of logs">
+          <span>{{ log.message }}</span>
+          <small class="text-muted">{{ log.timestamp | date: 'short' }}</small>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,69 @@
+<div class="signup-container">
+  <div class="signup-card">
+    <h2 class="signup-title">Signup</h2>
+
+    <form (ngSubmit)="onSignup()">
+      <!-- First Name -->
+      <div class="form-group">
+        <label for="firstName">First Name</label>
+        <input id="firstName"
+               type="text"
+               [(ngModel)]="firstName"
+               name="firstName"
+               required />
+      </div>
+
+      <!-- Last Name -->
+      <div class="form-group">
+        <label for="lastName">Last Name</label>
+        <input id="lastName"
+               type="text"
+               [(ngModel)]="lastName"
+               name="lastName"
+               required />
+      </div>
+
+      <!-- DOB -->
+      <div class="form-group">
+        <label for="dob">Date of Birth</label>
+        <input id="dob"
+               type="date"
+               [(ngModel)]="dateOfBirth"
+               name="dateOfBirth"
+               required />
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input id="email"
+               type="email"
+               [(ngModel)]="email"
+               name="email"
+               required />
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input id="password"
+               type="password"
+               [(ngModel)]="password"
+               name="password"
+               required />
+      </div>
+
+      <!-- Checkbox Role Selection -->
+      <div class="form-group role-checkbox">
+        <label>
+          <input type="checkbox" [(ngModel)]="isAdmin" name="isAdmin" />
+          Do you want to sign up as Admin?
+        </label>
+      </div>
+
+      <button type="submit" class="signup-btn">Signup</button>
+    </form>
+
+    <p class="signup-message" *ngIf="message">{{ message }}</p>
+  </div>
+</div>

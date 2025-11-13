@@ -1,0 +1,179 @@
+/* Overall Container */
+.admin-container {
+  min-height: 100vh;
+  padding-bottom: 2rem;
+  background: #f8f9fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Header */
+h2 {
+  font-weight: 700;
+  color: #333;
+}
+
+/* Summary Cards */
+.summary-card {
+  border-radius: 12px;
+  background: #fff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+  .summary-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+  }
+
+  .summary-card i {
+    font-size: 2rem;
+    color: #2575fc;
+  }
+
+  .summary-card h5 {
+    font-weight: 600;
+    color: #333;
+  }
+
+  .summary-card p {
+    margin-bottom: 0;
+    color: #000;
+  }
+
+/* 🔹 Highlight the active summary card */
+.active-card {
+  border-color: #2575fc;
+  background-color: #eef5ff;
+  box-shadow: 0 0 12px rgba(37, 117, 252, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Table Styling */
+.card {
+  border-radius: 12px;
+  border: none;
+}
+
+.table {
+  margin-bottom: 0;
+}
+
+  .table th {
+    color: #333;
+    font-weight: 600;
+    background-color: #f1f4f9;
+  }
+
+  .table td {
+    vertical-align: middle;
+    font-size: 0.95rem;
+  }
+
+.table-hover tbody tr:hover {
+  background-color: #f8fbff;
+}
+
+/* Buttons */
+.btn-warning {
+  background-color: #ffc107;
+  color: #222;
+  border: none;
+  transition: background-color 0.2s ease;
+}
+
+  .btn-warning:hover {
+    background-color: #e0a800;
+  }
+
+.btn-danger {
+  background-color: #dc3545;
+  border: none;
+  transition: background-color 0.2s ease;
+}
+
+  .btn-danger:hover {
+    background-color: #b52a34;
+  }
+
+.btn-outline-secondary {
+  border-color: #ccc;
+  color: #444;
+  transition: all 0.2s ease;
+}
+
+  .btn-outline-secondary:hover {
+    background-color: #f1f1f1;
+  }
+
+/* Activity Logs */
+.list-group-item {
+  border: none;
+  border-bottom: 1px solid #e6e6e6;
+  padding: 0.75rem 1rem;
+}
+
+  .list-group-item:last-child {
+    border-bottom: none;
+  }
+
+  .list-group-item span {
+    font-size: 0.95rem;
+    color: #333;
+  }
+
+  .list-group-item small {
+    font-size: 0.8rem;
+    color: #777;
+  }
+
+/* Message Alert */
+.alert {
+  border-radius: 10px;
+  margin-top: 1rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Smooth transitions between tables */
+.card-body {
+  transition: opacity 0.3s ease;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .summary-card {
+    margin-bottom: 1rem;
+  }
+
+    .summary-card i {
+      font-size: 1.6rem;
+    }
+
+    .summary-card h5 {
+      font-size: 1rem;
+    }
+
+    .summary-card p {
+      font-size: 0.9rem;
+    }
+
+  .table td, .table th {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .admin-container {
+    padding: 1rem;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+  }
+
+  .btn-outline-secondary {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.85rem;
+  }
+}
