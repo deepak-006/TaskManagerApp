@@ -27,4 +27,8 @@ export class AdminService {
     return this.http.put(`https://localhost:7165/api/AdminActivities/UpdateUserRole?userId=${userId}&newRole=${newRole}`, {});
   }
 
+  assignTaskToUser(task: Task): Observable<Task> {
+    return this.http.post<Task>('https://localhost:7165/api/AdminActivities/AssignTask', task)
+  }
+
 }

@@ -14,14 +14,19 @@ namespace TaskManagerWebServices.Controllers
     {
         private readonly TaskManagerRepository _repository;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly Serilog.ILogger _logger;
+        //private readonly Serilog.ILogger _logger;
+        private readonly ILogger<AdminActivitiesController> _logger;
 
-        public AdminActivitiesController(TaskManagerRepository repo, IHttpContextAccessor httpContextAccessor)
+        public AdminActivitiesController(
+            TaskManagerRepository repo,
+            IHttpContextAccessor accessor,
+            ILogger<AdminActivitiesController> logger)
         {
             _repository = repo;
-            _httpContextAccessor = httpContextAccessor;
-            _logger = Log.Logger;
+            _httpContextAccessor = accessor;
+            _logger = logger;
         }
+
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
@@ -29,23 +34,23 @@ namespace TaskManagerWebServices.Controllers
         {
             try
             {
-                _logger.Information("Admin requested all users.");
+                _logger.LogInformation("Admin requested all users.");
 
                 var users = _repository.GetAllUsers();
                 if (users != null)
                 {
-                    _logger.Information($"Fetched {users.Count} users successfully.");
+                    _logger.LogInformation($"Fetched {users.Count} users successfully.");
                     return Ok(users);
                 }
                 else
                 {
-                    _logger.Warning("No users found in the database.");
+                    _logger.LogWarning("No users found in the database.");
                     return NotFound("No users found");
                 }
             }
             catch (Exception ex)
             {
-                _logger.Error("Error in GetAllUsers: " + ex.Message);
+                _logger.LogError("LogError in GetAllUsers: " + ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
@@ -56,23 +61,23 @@ namespace TaskManagerWebServices.Controllers
         {
             try
             {
-                _logger.Information("Admin requested all tasks.");
+                _logger.LogInformation("Admin requested all tasks.");
 
                 var tasks = _repository.GetAllTasks();
                 if (tasks != null)
                 {
-                    _logger.Information($"Fetched {tasks.Count} tasks successfully.");
+                    _logger.LogInformation($"Fetched {tasks.Count} tasks successfully.");
                     return Ok(tasks);
                 }
                 else
                 {
-                    _logger.Warning("No tasks found.");
+                    _logger.LogWarning("No tasks found.");
                     return NotFound("No tasks found");
                 }
             }
             catch (Exception ex)
             {
-                _logger.Error("Error in GetAllTasks: " + ex.Message);
+                _logger.LogError("LogError in GetAllTasks: " + ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
@@ -84,7 +89,7 @@ namespace TaskManagerWebServices.Controllers
             try
             {
                 int adminId = GetUserIdFromClaims();
-                _logger.Information($"Admin {adminId} attempting to assign a task to User {taskModel.AssignedTo}");
+                _logger.LogInformation($"Admin {adminId} attempting to assign a task to User {taskModel.AssignedTo}");
 
                 var task = new TaskManagerDAL.Models.Task
                 {
@@ -104,18 +109,18 @@ namespace TaskManagerWebServices.Controllers
 
                 if (taskId > 0)
                 {
-                    _logger.Information($"Task '{task.Title}' assigned successfully by Admin {adminId}.");
-                    return Ok(task);
+                    _logger.LogInformation($"Task '{task.Title}' assigned successfully by Admin {adminId}.");
+                    return Ok(new { task });
                 }
                 else
                 {
-                    _logger.Error("Failed to assign task — database returned invalid taskId.");
+                    _logger.LogError("Failed to assign task — database returned invalid taskId.");
                     return StatusCode(500, "Internal server error");
                 }
             }
             catch (Exception ex)
             {
-                _logger.Error("Error in AssignTask: " + ex.Message);
+                _logger.LogError("LogError in AssignTask: " + ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
@@ -127,11 +132,11 @@ namespace TaskManagerWebServices.Controllers
             try
             {
                 int adminId = GetUserIdFromClaims();
-                _logger.Information($"Admin {adminId} attempting to delete user with ID {userId}");
+                _logger.LogInformation($"Admin {adminId} attempting to delete user with ID {userId}");
 
                 if (adminId == -99)
                 {
-                    _logger.Warning("Invalid admin user claims while deleting user.");
+                    _logger.LogWarning("Invalid admin user claims while deleting user.");
                     return Unauthorized("Invalid user claims");
                 }
 
@@ -139,23 +144,23 @@ namespace TaskManagerWebServices.Controllers
 
                 if (result == 1)
                 {
-                    _logger.Information($"User with ID {userId} deleted successfully by Admin {adminId}.");
+                    _logger.LogInformation($"User with ID {userId} deleted successfully by Admin {adminId}.");
                     return Ok(new { UserId = "User deleted successfully with ID: " + userId });
                 }
                 else if (result == 0)
                 {
-                    _logger.Warning($"User with ID {userId} not found or could not be deleted.");
+                    _logger.LogWarning($"User with ID {userId} not found or could not be deleted.");
                     return NotFound("User not found or could not be deleted");
                 }
                 else
                 {
-                    _logger.Error($"Unexpected deleteUser DB result ({result}) for userID {userId}.");
-                    return StatusCode(500, "Error deleting user");
+                    _logger.LogError($"Unexpected deleteUser DB result ({result}) for userID {userId}.");
+                    return StatusCode(500, "LogError deleting user");
                 }
             }
             catch (Exception ex)
             {
-                _logger.Error("Error in deleteUser: " + ex.Message);
+                _logger.LogError("LogError in deleteUser: " + ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
@@ -167,11 +172,11 @@ namespace TaskManagerWebServices.Controllers
             try
             {
                 int adminId = GetUserIdFromClaims();
-                _logger.Information($"Admin {adminId} attempting to update role of User {userId} to {newRole}");
+                _logger.LogInformation($"Admin {adminId} attempting to update role of User {userId} to {newRole}");
 
                 if (adminId == -99)
                 {
-                    _logger.Warning("Invalid admin user claims while updating user role.");
+                    _logger.LogWarning("Invalid admin user claims while updating user role.");
                     return Unauthorized("Invalid user claims");
                 }
 
@@ -179,21 +184,23 @@ namespace TaskManagerWebServices.Controllers
 
                 if (result == 1)
                 {
-                    _logger.Information($"Role of User {userId} updated successfully to '{newRole}' by Admin {adminId}.");
+                    _logger.LogInformation($"Role of User {userId} updated successfully to '{newRole}' by Admin {adminId}.");
                     return Ok(new { UserId = userId, NewRole = newRole });
                 }
                 else
                 {
-                    _logger.Warning($"User {userId} not found or role not updated.");
+                    _logger.LogWarning($"User {userId} not found or role not updated.");
                     return NotFound("User not found or role not updated");
                 }
             }
             catch (Exception ex)
             {
-                _logger.Error("Error in UpdateUserRole: " + ex.Message);
+                _logger.LogError("LogError in UpdateUserRole: " + ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
+
 
         private int GetUserIdFromClaims()
         {
@@ -208,7 +215,7 @@ namespace TaskManagerWebServices.Controllers
             }
             catch (Exception ex)
             {
-                _logger.Warning("Failed to extract UserId from claims: " + ex.Message);
+                _logger.LogWarning("Failed to extract UserId from claims: " + ex.Message);
                 return -99;
             }
         }

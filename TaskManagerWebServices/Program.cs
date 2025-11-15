@@ -2,10 +2,13 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using Serilog.Events;
+using Serilog.Sinks.MSSqlServer;
 using System.Text;
 using TaskManagerDAL;
+using TaskManagerWebServices.Controllers;
 using TaskManagerWebServices.Utilities;
-using Serilog;
 
 namespace TaskManagerWebServices
 {
@@ -18,6 +21,7 @@ namespace TaskManagerWebServices
             // Add services to the container.
             builder.Services.AddScoped<TaskManagerRepository>();
             builder.Services.AddScoped<ITokenService, TokenService>();
+           
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -80,8 +84,25 @@ namespace TaskManagerWebServices
             });
 
             Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()   // Only Information and above globally
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Error)   // Ignore Microsoft logs
+                .MinimumLevel.Override("System", LogEventLevel.Error)      // Ignore system logs
+                .Filter.ByIncludingOnly(e =>
+                    e.Properties.ContainsKey("SourceContext") &&            // Only log sources that have a namespace
+                    e.Properties["SourceContext"].ToString()
+                        .Contains("TaskManagerWebServices.Controllers")      //  ONLY YOUR CONTROLLERS LOGS
+                )
                 .WriteTo.File("Log.txt", rollingInterval: RollingInterval.Day)
+                .WriteTo.MSSqlServer(
+                    connectionString: builder.Configuration.GetConnectionString("TaskManagerDBConnectionString"),
+                    sinkOptions: new Serilog.Sinks.MSSqlServer.MSSqlServerSinkOptions
+                    {
+                        TableName = "Logs",
+                        AutoCreateSqlTable = true
+                    }
+                )
                 .CreateLogger();
+
 
             builder.Host.UseSerilog();
 

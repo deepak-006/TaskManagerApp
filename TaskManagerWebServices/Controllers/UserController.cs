@@ -15,13 +15,12 @@ namespace TaskManagerWebServices.Controllers
     {
         private readonly TaskManagerRepository _repository;
         private readonly ITokenService _tokenService;
-        private readonly Serilog.ILogger _logger;
-
-        public UserController(TaskManagerRepository repo, ITokenService token)
+        private readonly ILogger<AdminActivitiesController> _logger;
+        public UserController(TaskManagerRepository repo, ITokenService token, ILogger<AdminActivitiesController> logger)
         {
             _repository = repo;
             _tokenService = token;
-            _logger = Log.Logger;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -33,18 +32,18 @@ namespace TaskManagerWebServices.Controllers
                 if (user != null && user.IsDeleted != true && PasswordHasher.Verify(loginModel.password, user.PasswordHash))
                 {
                     var token = _tokenService.CreateToken(user);
-                    _logger.Information($"User logged in successfully with emailId: {user.Email}.");
+                    _logger.LogInformation($"User logged in successfully with emailId: {user.Email}.");
                     return Ok(new { token, role = user.Role, name = user.FirstName + " " +user.LastName });
                 }
                 else
                 {
-                    _logger.Warning($"User not found for {loginModel.email}.");
+                    _logger.LogWarning($"User not found for {loginModel.email}.");
                     return NotFound("Invalid email or password");
                 }
             }
             catch (Exception ex)
             {
-                _logger.Error("Error occured while logging in" + ex.Message);
+                _logger.LogError("Error occured while logging in" + ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
@@ -70,18 +69,18 @@ namespace TaskManagerWebServices.Controllers
                 int userId = _repository.Signup(user);
                 if (userId > 0)
                 {
-                    _logger.Information($"User User successfully created with emailId: {userModel.Email}.");
+                    _logger.LogInformation($"User User successfully created with emailId: {userModel.Email}.");
                     return Ok(new { message = "User successfully created", userId = userId });
                 }
                 else
                 {
-                    _logger.Warning($"User could not be created for: {userModel}.");
+                    _logger.LogWarning($"User could not be created for: {userModel}.");
                     return BadRequest("User could not be created");
                 }
             }
             catch (Exception ex)
             {
-                _logger.Error("Error occured while creating account" + ex.Message);
+                _logger.LogError("Error occured while creating account" + ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }

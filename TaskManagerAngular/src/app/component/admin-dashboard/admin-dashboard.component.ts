@@ -5,7 +5,7 @@ import { AdminService } from '../../service/admin/admin.service';
 import { User } from '../../model/user';
 import { Task } from '../../model/task';
 
-type DashboardView = 'users' | 'allTasks' | 'completedTasks' | 'pendingTasks';
+type DashboardView = 'users' | 'allTasks' | 'assigntask';
 
 interface SummaryCard {
   title: string;
@@ -37,6 +37,7 @@ interface MappedTask extends Task {
   styleUrls: ['./admin-dashboard.component.css']
 })
 export class AdminDashboardComponent implements OnInit {
+
   users: AdminUser[] = [];
   tasks: MappedTask[] = [];
   filteredTasks: MappedTask[] = [];
@@ -47,12 +48,11 @@ export class AdminDashboardComponent implements OnInit {
   isLoading: boolean = false;
   userName: string | null = '';
 
-
+  // ⭐ ONLY THREE CARDS NOW
   summaryCards: SummaryCard[] = [
     { title: 'Total Users', icon: 'bi bi-people-fill', type: 'users', value: 0 },
     { title: 'Total Tasks', icon: 'bi bi-list-check', type: 'allTasks', value: 0 },
-    { title: 'Completed Tasks', icon: 'bi bi-check-circle', type: 'completedTasks', value: 0 },
-    { title: 'Pending Tasks', icon: 'bi bi-hourglass-split', type: 'pendingTasks', value: 0 }
+    { title: 'Assign Task', icon: 'bi bi-plus-circle', type: 'assigntask', value: 0 }
   ];
 
   constructor(
@@ -67,15 +67,16 @@ export class AdminDashboardComponent implements OnInit {
       this.router.navigate(['/login']);
       return;
     }
+
     this.userName = this.userService.getUserName();
-    // Load both users and tasks together
     this.loadUsersAndTasks();
     this.loadLogs();
   }
 
-  // ✅ Load users first, then tasks — so we can map user names
+  // Load all users first
   loadUsersAndTasks(): void {
     this.isLoading = true;
+
     this.adminService.getAllUsers().subscribe({
       next: (userRes: User[]) => {
         this.users = userRes.map(u => ({
@@ -85,13 +86,12 @@ export class AdminDashboardComponent implements OnInit {
           email: u.email,
           role: u.role
         }));
-        this.summaryCards[0].value = this.users.length;
 
-        // Once users are loaded, load tasks
+        this.summaryCards[0].value = this.users.length;
         this.loadTasksWithMapping();
       },
       error: (err) => {
-        console.error('Failed to load users:', err);
+        console.error(err);
         this.message = 'Error loading users.';
         this.messageType = 'error';
         this.isLoading = false;
@@ -99,11 +99,11 @@ export class AdminDashboardComponent implements OnInit {
     });
   }
 
-  // ✅ Load tasks and map assigned user names
+  // Load tasks and attach user names
   loadTasksWithMapping(): void {
     this.adminService.getAllTasks().subscribe({
       next: (taskRes: Task[]) => {
-        // Map tasks to include assigned user name
+
         this.tasks = taskRes.map(task => {
           const assignedUser = this.users.find(u => u.id === task.assignedTo);
           return {
@@ -114,12 +114,14 @@ export class AdminDashboardComponent implements OnInit {
           };
         });
 
-        this.updateSummaryCounts();
-        this.showView('users'); // default view
+        this.summaryCards[1].value = this.tasks.length;
+
+        this.filteredTasks = [...this.tasks]; // always all tasks
+        this.showView('users');
         this.isLoading = false;
       },
       error: (err) => {
-        console.error('Failed to load tasks:', err);
+        console.error(err);
         this.message = 'Error loading tasks.';
         this.messageType = 'error';
         this.isLoading = false;
@@ -127,67 +129,103 @@ export class AdminDashboardComponent implements OnInit {
     });
   }
 
-  updateSummaryCounts(): void {
-    this.summaryCards[1].value = this.tasks.length;
-    this.summaryCards[2].value = this.tasks.filter(t => t.status === 'Completed').length;
-    this.summaryCards[3].value = this.tasks.filter(t => t.status === 'Pending').length;
+  // Assign Task Model
+  newTask: Task = {
+    taskId: 0,
+    title: '',
+    description: '',
+    status: 'Pending',
+    priority: 'Medium',
+    dueDate: '',
+    assignedTo: 0,
+    createdAt: '',
+    updatedAt: ''
+  };
+
+  // Assign Task Method
+  assignTask(): void {
+    this.newTask.createdAt = new Date().toISOString();
+    this.newTask.updatedAt = new Date().toISOString();
+
+    this.adminService.assignTaskToUser(this.newTask).subscribe({
+      next: () => {
+        this.message = 'Task assigned successfully!';
+        this.messageType = 'success';
+
+        this.loadUsersAndTasks();
+        this.activeView = 'allTasks';
+
+        this.newTask = {
+          taskId: 0,
+          title: '',
+          description: '',
+          status: 'Pending',
+          priority: 'Medium',
+          dueDate: '',
+          assignedTo: 0,
+          createdAt: '',
+          updatedAt: ''
+        };
+      },
+      error: (err) => {
+        console.error(err);
+        this.message = 'Failed to assign task.';
+        this.messageType = 'error';
+      }
+    });
   }
 
-  // ✅ Switch between views
+  // View switching
   showView(view: DashboardView): void {
     this.activeView = view;
-    if (view === 'completedTasks') {
-      this.filteredTasks = this.tasks.filter(t => t.status === 'Completed');
-    } else if (view === 'pendingTasks') {
-      this.filteredTasks = this.tasks.filter(t => t.status === 'Pending');
-    } else if (view === 'allTasks') {
-      this.filteredTasks = [...this.tasks];
+
+    if (view === 'allTasks') {
+      this.filteredTasks = [...this.tasks]; // always full list
     }
   }
 
-  // ✅ Refresh users manually
   refreshUsers(): void {
     this.loadUsersAndTasks();
     this.message = 'User list refreshed!';
     this.messageType = 'success';
   }
 
-  // ✅ Delete user
   deleteUser(userId: number): void {
-    if (confirm('Are you sure you want to delete this user?')) {
-      this.adminService.deleteUser(userId).subscribe({
-        next: (res) => {
-          this.users = this.users.filter(u => u.id !== userId);
-          this.summaryCards[0].value = this.users.length;
-          this.message = res?.message || 'User deleted successfully.';
-          this.messageType = 'success';
-        },
-        error: (err) => {
-          console.error('Error deleting user:', err);
-          this.message = 'Error deleting user.';
-          this.messageType = 'error';
-        }
-      });
-    }
+    if (!confirm('Are you sure you want to delete this user?')) return;
+
+    this.adminService.deleteUser(userId).subscribe({
+      next: (res) => {
+        this.users = this.users.filter(u => u.id !== userId);
+        this.summaryCards[0].value = this.users.length;
+
+        this.message = res?.message || 'User deleted successfully.';
+        this.messageType = 'success';
+      },
+      error: (err) => {
+        console.error(err);
+        this.message = 'Error deleting user.';
+        this.messageType = 'error';
+      }
+    });
   }
 
-  // ✅ Change role
   changeRole(user: AdminUser): void {
     const newRole = user.role === 'Admin' ? 'User' : 'Admin';
-    if (confirm(`Change ${user.firstName}'s role to ${newRole}?`)) {
-      this.adminService.updateUserRole(user.id, newRole).subscribe({
-        next: () => {
-          user.role = newRole;
-          this.message = `${user.firstName}'s role changed to ${newRole}.`;
-          this.messageType = 'success';
-        },
-        error: (err) => {
-          console.error('Error updating role:', err);
-          this.message = 'Failed to update user role.';
-          this.messageType = 'error';
-        }
-      });
-    }
+
+    if (!confirm(`Change ${user.firstName}'s role to ${newRole}?`)) return;
+
+    this.adminService.updateUserRole(user.id, newRole).subscribe({
+      next: () => {
+        user.role = newRole;
+        this.message = `${user.firstName}'s role changed to ${newRole}.`;
+        this.messageType = 'success';
+      },
+      error: (err) => {
+        console.error(err);
+        this.message = 'Failed to update user role.';
+        this.messageType = 'error';
+      }
+    });
   }
 
   loadLogs(): void {

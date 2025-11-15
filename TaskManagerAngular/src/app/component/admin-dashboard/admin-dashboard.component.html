@@ -1,10 +1,10 @@
 <div class="admin-container container mt-4">
+
   <!-- Header -->
   <div class="d-flex justify-content-between align-items-center mb-4">
-
     <div>
       <h2 class="mb-0">Admin Dashboard</h2>
-      <h5 class="text-primary mt-1">Welcome, {{ userName }} </h5>
+      <h5 class="text-primary mt-1">Welcome, {{ userName }}</h5>
     </div>
 
     <button class="btn btn-outline-secondary" (click)="logout()">
@@ -12,8 +12,7 @@
     </button>
   </div>
 
-
-  <!-- ✅ Feedback Message -->
+  <!-- Feedback Message -->
   <div *ngIf="message" class="alert"
        [ngClass]="{
          'alert-success': messageType === 'success',
@@ -22,9 +21,9 @@
     {{ message }}
   </div>
 
-  <!-- ✅ Summary Cards -->
+  <!-- Summary Cards -->
   <div class="row g-3 mb-4">
-    <div class="col-md-3 col-sm-6"
+    <div class="col-md-4 col-sm-6"
          *ngFor="let card of summaryCards"
          (click)="showView(card.type)">
       <div class="card summary-card shadow-sm text-center"
@@ -40,9 +39,10 @@
     </div>
   </div>
 
-  <!-- ✅ USERS TABLE -->
+  <!-- USERS TABLE -->
   <div *ngIf="activeView === 'users'" class="card mb-4 shadow-sm">
     <div class="card-body">
+
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h5 class="mb-0">User Management</h5>
         <button class="btn btn-sm btn-primary" (click)="refreshUsers()">
@@ -95,21 +95,15 @@
       <ng-template #noUsers>
         <p class="text-muted text-center">No users found.</p>
       </ng-template>
+
     </div>
   </div>
 
-  <!-- ✅ TASKS TABLE -->
-  <div *ngIf="activeView !== 'users'" class="card mb-4 shadow-sm">
+  <!-- TASKS TABLE (ALWAYS ALL TASKS) -->
+  <div *ngIf="activeView === 'allTasks'" class="card mb-4 shadow-sm">
     <div class="card-body">
-      <h5 class="mb-3">
-        {{
-          activeView === 'allTasks'
-            ? 'All Tasks'
-            : activeView === 'completedTasks'
-            ? 'Completed Tasks'
-            : 'Pending Tasks'
-        }}
-      </h5>
+
+      <h5 class="mb-3">All Tasks</h5>
 
       <div *ngIf="filteredTasks.length > 0; else noTasks">
         <div class="table-responsive">
@@ -140,7 +134,7 @@
                 </td>
                 <td>{{ task.priority }}</td>
                 <td>{{ task.dueDate | date: 'mediumDate' }}</td>
-                <td>{{ task.assignedToName || 'Unassigned' }}</td>
+                <td>{{ task.assignedToName }}</td>
               </tr>
             </tbody>
           </table>
@@ -150,12 +144,72 @@
       <ng-template #noTasks>
         <p class="text-muted text-center">No tasks available.</p>
       </ng-template>
+
     </div>
   </div>
 
-  <!-- ✅ ACTIVITY LOGS -->
+  <!-- ASSIGN TASK FORM -->
+  <div *ngIf="activeView === 'assigntask'" class="card shadow-sm mb-4">
+    <div class="card-body">
+
+      <h5 class="mb-3">Assign New Task</h5>
+
+      <form (ngSubmit)="assignTask()">
+
+        <div class="mb-3">
+          <label class="form-label">Title</label>
+          <input type="text" class="form-control" [(ngModel)]="newTask.title" name="title" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Description</label>
+          <textarea class="form-control" [(ngModel)]="newTask.description" name="description"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Priority</label>
+          <select class="form-select" [(ngModel)]="newTask.priority" name="priority">
+            <option>Low</option>
+            <option>Medium</option>
+            <option>High</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Status</label>
+          <select class="form-select" [(ngModel)]="newTask.status" name="status">
+            <option>Pending</option>
+            <option>In Progress</option>
+            <option>Completed</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Due Date</label>
+          <input type="date" class="form-control" [(ngModel)]="newTask.dueDate" name="dueDate" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Assign To</label>
+          <select class="form-select" [(ngModel)]="newTask.assignedTo" name="assignedTo" required>
+            <option value="">Select user</option>
+            <option *ngFor="let u of users" [value]="u.id">
+              {{ u.firstName }} {{ u.lastName }} ({{ u.role }})
+            </option>
+          </select>
+        </div>
+
+        <button class="btn btn-primary" type="submit">Assign Task</button>
+
+      </form>
+
+    </div>
+  </div>
+
+  <!-- ACTIVITY LOGS -->
   <div class="card shadow-sm">
     <div class="card-body">
+
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h5 class="mb-0">Recent Activity Logs</h5>
         <button class="btn btn-sm btn-outline-primary" (click)="loadLogs()">
@@ -170,6 +224,8 @@
           <small class="text-muted">{{ log.timestamp | date: 'short' }}</small>
         </li>
       </ul>
+
     </div>
   </div>
+
 </div>

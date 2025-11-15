@@ -13,13 +13,13 @@ namespace TaskManagerWebServices.Controllers
     {
         private readonly TaskManagerRepository _repository;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly Serilog.ILogger _logger;
+        private readonly ILogger<AdminActivitiesController> _logger;
 
-        public TaskController(TaskManagerRepository repo, IHttpContextAccessor httpContextAccessor)
+        public TaskController(TaskManagerRepository repo, IHttpContextAccessor httpContextAccessor, ILogger<AdminActivitiesController> logger)
         {
             _repository = repo;
             _httpContextAccessor = httpContextAccessor;
-            _logger = Log.Logger;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -29,24 +29,24 @@ namespace TaskManagerWebServices.Controllers
             try
             {
                 int userId = GetUserIdFromClaims();
-                _logger.Information($"User {userId} requested their tasks.");
+                _logger.LogInformation($"User {userId} requested their tasks.");
 
                 var tasks = _repository.GetTasks(userId);
 
                 if (tasks != null)
                 {
-                    _logger.Information($"Fetched {tasks.Count} tasks for user {userId}.");
+                    _logger.LogInformation($"Fetched {tasks.Count} tasks for user {userId}.");
                     return Ok(tasks);
                 }
                 else
                 {
-                    _logger.Warning($"No tasks found for user {userId}.");
+                    _logger.LogWarning($"No tasks found for user {userId}.");
                     return NotFound("No tasks found");
                 }
             }
             catch (Exception ex)
             {
-                _logger.Error("Error in GetTasks: " + ex.Message);
+                _logger.LogError("LogError in GetTasks: " + ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
@@ -58,7 +58,7 @@ namespace TaskManagerWebServices.Controllers
             try
             {
                 int userId = GetUserIdFromClaims();
-                _logger.Information($"User {userId} attempting to create a new task titled '{taskModel.Title}'.");
+                _logger.LogInformation($"User {userId} attempting to create a new task titled '{taskModel.Title}'.");
 
                 var task = new TaskManagerDAL.Models.Task
                 {
@@ -78,18 +78,18 @@ namespace TaskManagerWebServices.Controllers
 
                 if (taskId > 0)
                 {
-                    _logger.Information($"Task '{task.Title}' created successfully by user {userId}.");
+                    _logger.LogInformation($"Task '{task.Title}' created successfully by user {userId}.");
                     return Ok(task);
                 }
                 else
                 {
-                    _logger.Error("Database failed to create a task.");
+                    _logger.LogError("Database failed to create a task.");
                     return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
                 }
             }
             catch (Exception ex)
             {
-                _logger.Error("Error in CreateTask: " + ex.Message);
+                _logger.LogError("LogError in CreateTask: " + ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
@@ -101,13 +101,13 @@ namespace TaskManagerWebServices.Controllers
             try
             {
                 int userId = GetUserIdFromClaims();
-                _logger.Information($"User {userId} attempting to update task {taskModel.TaskId}.");
+                _logger.LogInformation($"User {userId} attempting to update task {taskModel.TaskId}.");
 
                 var existingTask = _repository.GetTaskById(taskModel.TaskId);
 
                 if (existingTask == null)
                 {
-                    _logger.Warning($"Task {taskModel.TaskId} not found for updating.");
+                    _logger.LogWarning($"Task {taskModel.TaskId} not found for updating.");
                     return NotFound("Task not found");
                 }
 
@@ -122,18 +122,18 @@ namespace TaskManagerWebServices.Controllers
 
                 if (isUpdated == 1)
                 {
-                    _logger.Information($"Task {taskModel.TaskId} updated successfully by user {userId}.");
+                    _logger.LogInformation($"Task {taskModel.TaskId} updated successfully by user {userId}.");
                     return Ok(existingTask);
                 }
                 else
                 {
-                    _logger.Error($"Database failed to update task {taskModel.TaskId}.");
+                    _logger.LogError($"Database failed to update task {taskModel.TaskId}.");
                     return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
                 }
             }
             catch (Exception ex)
             {
-                _logger.Error("Error in UpdateTask: " + ex.Message);
+                _logger.LogError("LogError in UpdateTask: " + ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
@@ -145,25 +145,25 @@ namespace TaskManagerWebServices.Controllers
             try
             {
                 int userId = GetUserIdFromClaims();
-                _logger.Information($"User {userId} attempting to delete task {taskId}.");
+                _logger.LogInformation($"User {userId} attempting to delete task {taskId}.");
 
                 int isDeleted = _repository.DeleteTask(taskId, userId);
 
                 if (isDeleted == 1)
                 {
-                    _logger.Information($"Task {taskId} deleted successfully by user {userId}.");
+                    _logger.LogInformation($"Task {taskId} deleted successfully by user {userId}.");
                     return Ok(new { success = true, message = "Task successfully deleted" });
                 }
                 else
                 {
-                    _logger.Error($"Failed to delete task {taskId}. DB returned error.");
+                    _logger.LogError($"Failed to delete task {taskId}. DB returned error.");
                     return StatusCode(StatusCodes.Status500InternalServerError,
                         new { success = false, message = "Internal server error" });
                 }
             }
             catch (Exception ex)
             {
-                _logger.Error("Error in DeleteTask: " + ex.Message);
+                _logger.LogError("LogError in DeleteTask: " + ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
@@ -181,7 +181,7 @@ namespace TaskManagerWebServices.Controllers
             }
             catch (Exception ex)
             {
-                _logger.Warning("Failed to extract user id from claims: " + ex.Message);
+                _logger.LogWarning("Failed to extract user id from claims: " + ex.Message);
                 return -99;
             }
         }

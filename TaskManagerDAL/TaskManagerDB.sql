@@ -41,8 +41,13 @@ GO
 SELECT * FROM Users
 GO
 
+
 SELECT * FROM Tasks
 GO
+
+SELECT * FROM Logs
+
+drop table Logs
 
 ----
 --drop table users

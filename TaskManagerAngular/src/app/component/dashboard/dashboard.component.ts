@@ -95,6 +95,21 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   editTask(task: Task): void {
     this.editTaskData = { ...task }; // clone to avoid changing the list directly
+    // Fix due date formatting (works already)
+    this.editTaskData.dueDate = task.dueDate.split('T')[0];
+
+    // Fix priority (high → High)
+    this.editTaskData.priority =
+      task.priority.charAt(0).toUpperCase() + task.priority.slice(1).toLowerCase();
+
+    // Fix status (pending → Pending, in_progress → In Progress)
+    this.editTaskData.status = task.status
+      .replace('_', ' ')
+      .toLowerCase()
+      .split(' ')
+      .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(' ');
+
     this.editModalInstance.show();
   }
 

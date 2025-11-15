@@ -100,7 +100,7 @@ namespace TaskManagerDAL
             try
             {
                 var task = (from tasks in Context.Tasks
-                            where tasks.TaskId == taskId && tasks.CreatedBy == userId && !tasks.IsDeleted
+                            where tasks.TaskId == taskId && tasks.AssignedTo == userId && !tasks.IsDeleted
                             select tasks).FirstOrDefault();
 
                 if (task != null)
@@ -123,7 +123,7 @@ namespace TaskManagerDAL
             try
             {
                 var task = (from tasks in Context.Tasks
-                            where tasks.TaskId == updatedTask.TaskId && tasks.CreatedBy == userId && !tasks.IsDeleted
+                            where tasks.TaskId == updatedTask.TaskId && tasks.AssignedTo == userId && !tasks.IsDeleted
                             select tasks).FirstOrDefault();
                 if (task != null)
                 {
