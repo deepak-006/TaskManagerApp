@@ -94,6 +94,29 @@ namespace TaskManagerDAL
             return taskId;
         }
 
+        public int DeleteTask(int taskId)
+        {
+            int result = 0;
+            try
+            {
+                var task = (from tasks in Context.Tasks
+                            where tasks.TaskId == taskId && !tasks.IsDeleted
+                            select tasks).FirstOrDefault();
+
+                if (task != null)
+                {
+                    task.IsDeleted = true;
+                    Context.SaveChanges();
+                    result = 1;
+                }
+            }
+            catch (Exception)
+            {
+                result = -1;
+            }
+            return result;
+        }
+
         public int DeleteTask(int taskId, int userId)
         {
             int result = 0;
@@ -223,6 +246,21 @@ namespace TaskManagerDAL
                 result = -1;
             }
             return result;
+        }
+
+        public List<Log> GetLogs()
+        {
+            List<Log> logs = new List<Log>();
+            try
+            {
+                logs = (from l in Context.Logs
+                        select l).ToList();
+            }
+            catch (Exception)
+            {
+                logs = null;
+            }
+            return logs;
         }
     }
 }

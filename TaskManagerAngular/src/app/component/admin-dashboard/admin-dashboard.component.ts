@@ -4,6 +4,7 @@ import { UserService } from '../../service/user/user.service';
 import { AdminService } from '../../service/admin/admin.service';
 import { User } from '../../model/user';
 import { Task } from '../../model/task';
+import { LogEntry } from '../../model/log';
 
 type DashboardView = 'users' | 'allTasks' | 'assigntask';
 
@@ -22,11 +23,6 @@ interface AdminUser {
   role: string;
 }
 
-interface ActivityLog {
-  message: string;
-  timestamp: Date;
-}
-
 interface MappedTask extends Task {
   assignedToName?: string;
 }
@@ -41,14 +37,14 @@ export class AdminDashboardComponent implements OnInit {
   users: AdminUser[] = [];
   tasks: MappedTask[] = [];
   filteredTasks: MappedTask[] = [];
-  logs: ActivityLog[] = [];
+  logs: LogEntry[] = [];
+
   message: string = '';
   messageType: 'success' | 'error' | '' = '';
   activeView: DashboardView = 'users';
   isLoading: boolean = false;
   userName: string | null = '';
 
-  // ⭐ ONLY THREE CARDS NOW
   summaryCards: SummaryCard[] = [
     { title: 'Total Users', icon: 'bi bi-people-fill', type: 'users', value: 0 },
     { title: 'Total Tasks', icon: 'bi bi-list-check', type: 'allTasks', value: 0 },
@@ -73,7 +69,6 @@ export class AdminDashboardComponent implements OnInit {
     this.loadLogs();
   }
 
-  // Load all users first
   loadUsersAndTasks(): void {
     this.isLoading = true;
 
@@ -90,8 +85,7 @@ export class AdminDashboardComponent implements OnInit {
         this.summaryCards[0].value = this.users.length;
         this.loadTasksWithMapping();
       },
-      error: (err) => {
-        console.error(err);
+      error: () => {
         this.message = 'Error loading users.';
         this.messageType = 'error';
         this.isLoading = false;
@@ -99,29 +93,23 @@ export class AdminDashboardComponent implements OnInit {
     });
   }
 
-  // Load tasks and attach user names
   loadTasksWithMapping(): void {
     this.adminService.getAllTasks().subscribe({
       next: (taskRes: Task[]) => {
-
         this.tasks = taskRes.map(task => {
           const assignedUser = this.users.find(u => u.id === task.assignedTo);
           return {
             ...task,
-            assignedToName: assignedUser
-              ? `${assignedUser.firstName} ${assignedUser.lastName}`
-              : 'Unassigned'
+            assignedToName: assignedUser ? `${assignedUser.firstName} ${assignedUser.lastName}` : 'Unassigned'
           };
         });
 
         this.summaryCards[1].value = this.tasks.length;
-
-        this.filteredTasks = [...this.tasks]; // always all tasks
+        this.filteredTasks = [...this.tasks];
         this.showView('users');
         this.isLoading = false;
       },
-      error: (err) => {
-        console.error(err);
+      error: () => {
         this.message = 'Error loading tasks.';
         this.messageType = 'error';
         this.isLoading = false;
@@ -129,7 +117,6 @@ export class AdminDashboardComponent implements OnInit {
     });
   }
 
-  // Assign Task Model
   newTask: Task = {
     taskId: 0,
     title: '',
@@ -142,7 +129,6 @@ export class AdminDashboardComponent implements OnInit {
     updatedAt: ''
   };
 
-  // Assign Task Method
   assignTask(): void {
     this.newTask.createdAt = new Date().toISOString();
     this.newTask.updatedAt = new Date().toISOString();
@@ -151,7 +137,6 @@ export class AdminDashboardComponent implements OnInit {
       next: () => {
         this.message = 'Task assigned successfully!';
         this.messageType = 'success';
-
         this.loadUsersAndTasks();
         this.activeView = 'allTasks';
 
@@ -167,20 +152,18 @@ export class AdminDashboardComponent implements OnInit {
           updatedAt: ''
         };
       },
-      error: (err) => {
-        console.error(err);
+      error: () => {
         this.message = 'Failed to assign task.';
         this.messageType = 'error';
       }
     });
   }
 
-  // View switching
   showView(view: DashboardView): void {
     this.activeView = view;
 
     if (view === 'allTasks') {
-      this.filteredTasks = [...this.tasks]; // always full list
+      this.filteredTasks = [...this.tasks];
     }
   }
 
@@ -197,12 +180,10 @@ export class AdminDashboardComponent implements OnInit {
       next: (res) => {
         this.users = this.users.filter(u => u.id !== userId);
         this.summaryCards[0].value = this.users.length;
-
         this.message = res?.message || 'User deleted successfully.';
         this.messageType = 'success';
       },
-      error: (err) => {
-        console.error(err);
+      error: () => {
         this.message = 'Error deleting user.';
         this.messageType = 'error';
       }
@@ -220,21 +201,24 @@ export class AdminDashboardComponent implements OnInit {
         this.message = `${user.firstName}'s role changed to ${newRole}.`;
         this.messageType = 'success';
       },
-      error: (err) => {
-        console.error(err);
+      error: () => {
         this.message = 'Failed to update user role.';
         this.messageType = 'error';
       }
     });
   }
 
+  /** ⬇️ Load logs from API instead of dummy data */
   loadLogs(): void {
-    this.logs = [
-      { message: 'Rohan created a new task.', timestamp: new Date() },
-      { message: 'Neha updated a task.', timestamp: new Date() },
-      { message: 'Amit deleted a task.', timestamp: new Date() },
-      { message: 'Rohan changed Neha’s role to Admin.', timestamp: new Date() }
-    ];
+    this.adminService.getAllLogs().subscribe({
+      next: (logRes: LogEntry[]) => {
+        this.logs = logRes;
+      },
+      error: () => {
+        this.message = 'Error loading logs.';
+        this.messageType = 'error';
+      }
+    });
   }
 
   logout(): void {

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../../model/user';
 import { Task } from '../../model/task';
+import { LogEntry } from '../../model/log';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +30,10 @@ export class AdminService {
 
   assignTaskToUser(task: Task): Observable<Task> {
     return this.http.post<Task>('https://localhost:7165/api/AdminActivities/AssignTask', task)
+  }
+
+  getAllLogs(): Observable<LogEntry[]> {
+    return this.http.get<LogEntry[]>('https://localhost:7165/api/AdminActivities/GetSystemLogs');
   }
 
 }

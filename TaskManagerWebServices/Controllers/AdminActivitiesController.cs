@@ -200,6 +200,66 @@ namespace TaskManagerWebServices.Controllers
             }
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IActionResult GetSystemLogs()
+        {
+            try
+            {
+                _logger.LogInformation("Admin requested system logs.");
+                var logs = _repository.GetLogs();
+                if (logs != null)
+                {
+                    return Ok(logs);
+                }
+                else
+                {
+                    return NotFound("No log entries found");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpPut]
+        [Authorize(Roles = "Admin")]
+        public IActionResult DeleteUserTask(int taskId)
+        {
+            try
+            {
+                int adminId = GetUserIdFromClaims();
+                _logger.LogInformation($"Admin {adminId} attempting to delete task with ID {taskId}");
+                if (adminId == -99)
+                {
+                    _logger.LogWarning("Invalid admin user claims while deleting task.");
+                    return Unauthorized("Invalid user claims");
+                }
+                int result = _repository.DeleteTask(taskId);
+                if (result == 1)
+                {
+                    _logger.LogInformation($"Task with ID {taskId} deleted successfully by Admin {adminId}.");
+                    return Ok(new { TaskId = "Task deleted successfully with ID: " + taskId });
+                }
+                else if (result == 0)
+                {
+                    _logger.LogWarning($"Task with ID {taskId} not found or could not be deleted.");
+                    return NotFound("Task not found or could not be deleted");
+                }
+                else
+                {
+                    _logger.LogError($"Unexpected DeleteTask DB result ({result}) for taskID {taskId}.");
+                    return StatusCode(500, "LogError deleting task");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("LogError in DeleteUserTask: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
 
 
         private int GetUserIdFromClaims()
