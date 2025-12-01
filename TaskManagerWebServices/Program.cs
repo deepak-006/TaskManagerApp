@@ -1,5 +1,6 @@
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -7,7 +8,9 @@ using Serilog.Events;
 using Serilog.Sinks.MSSqlServer;
 using System.Text;
 using TaskManagerDAL;
+using TaskManagerDAL.Models;
 using TaskManagerWebServices.Controllers;
+using TaskManagerWebServices.Middleware;
 using TaskManagerWebServices.Utilities;
 
 namespace TaskManagerWebServices
@@ -24,6 +27,8 @@ namespace TaskManagerWebServices
            
 
             builder.Services.AddControllers();
+            builder.Services.AddDbContext<TaskManagerDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("TaskManagerDBConnectionString")));
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
@@ -73,17 +78,17 @@ namespace TaskManagerWebServices
 
             builder.Services.AddHttpContextAccessor();
 
-            //  Optional CORS (if frontend is separate)
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowFrontend", policy =>
-                    policy.WithOrigins("http://localhost:4200") // Angular/React dev server
+                    policy.WithOrigins("http://localhost:4200", "http://localhost:8091", "http://10.59.221.74:8091") 
                           .AllowAnyMethod()
                           .AllowAnyHeader()
-                          .AllowCredentials());
+                          .AllowCredentials()
+                          .WithExposedHeaders("X-Total-Count", "X-Page-Number", "X-Page-Size")); //ADD THIS
             });
 
-            Log.Logger = new LoggerConfiguration()
+            Serilog.Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()   // Only Information and above globally
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Error)   // Ignore Microsoft logs
                 .MinimumLevel.Override("System", LogEventLevel.Error)      // Ignore system logs
@@ -109,15 +114,15 @@ namespace TaskManagerWebServices
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
+         
                 app.UseSwagger();
                 app.UseSwaggerUI();
-            }
+            
 
             app.UseHttpsRedirection();
 
             app.UseCors("AllowFrontend");
+            app.UseMiddleware<ApiLoggingMiddleware>();
 
             app.UseAuthentication();
             app.UseAuthorization();

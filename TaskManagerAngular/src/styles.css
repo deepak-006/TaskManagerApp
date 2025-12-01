@@ -1,1 +1,31 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+  --primary: #0d6efd;
+  --primary-hover: #0b5ed7;
+  --primary-light: #eaf2ff;
+  --bg-body: #f7f8fa;
+  --bg-card: #ffffff;
+  --bg-table-header: #f1f2f4;
+  --border: #e5e7eb;
+  --border-dark: #d1d5db;
+  --text-dark: #1f2937;
+  --text-medium: #4b5563;
+  --text-light: #6b7280;
+  --success: #16a34a;
+  --success-light: #e7f7ec;
+  --warning: #f59e0b;
+  --warning-light: #fef6e7;
+  --danger: #dc2626;
+  --danger-light: #fde7e7;
+  --info: #0ea5e9;
+  --info-light: #e8f7ff;
+}
+
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 100% !important;
+  width: 100% !important;
+  overflow-x: hidden !important;
+}
+

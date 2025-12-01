@@ -1,0 +1,19 @@
+2025-11-22 15:09:49.852 +05:30 [INF] User logged in successfully with emailId: user.
+2025-11-22 15:14:26.382 +05:30 [INF] User logged in successfully with emailId: viv.richards@icc.in.
+2025-11-22 15:21:09.601 +05:30 [INF] Role of User 3 updated successfully to 'User' by Admin 5.
+2025-11-22 15:21:43.107 +05:30 [INF] Task 'Do that' assigned successfully by Admin 5 to user 3.
+2025-11-22 15:22:14.137 +05:30 [INF] User logged in successfully with emailId: deepakzbaidya@gmail.com.
+2025-11-22 15:22:14.167 +05:30 [INF] User 3 requested their tasks.
+2025-11-22 15:22:14.183 +05:30 [INF] Fetched 4 tasks for user 3.
+2025-11-22 15:22:28.338 +05:30 [INF] User 3 attempting to update task 17.
+2025-11-22 15:22:28.370 +05:30 [INF] Task 17 updated successfully by user 3.
+2025-11-22 15:22:38.271 +05:30 [INF] User 3 attempting to update task 17.
+2025-11-22 15:22:38.279 +05:30 [INF] Task 17 updated successfully by user 3.
+2025-11-22 15:24:45.705 +05:30 [INF] User logged in successfully with emailId: user.
+2025-11-22 15:27:31.506 +05:30 [WRN] User not found for string.
+2025-11-22 15:28:15.789 +05:30 [INF] User logged in successfully with emailId: viv.richards@icc.in.
+2025-11-22 15:59:35.580 +05:30 [INF] User logged in successfully with emailId: deepakzbaidya@gmail.com.
+2025-11-22 15:59:35.646 +05:30 [INF] User 3 requested their tasks.
+2025-11-22 15:59:35.710 +05:30 [INF] Fetched 4 tasks for user 3.
+2025-11-22 16:01:08.525 +05:30 [INF] User 3 attempting to delete task 17.
+2025-11-22 16:01:08.589 +05:30 [INF] Task 17 deleted successfully by user 3.

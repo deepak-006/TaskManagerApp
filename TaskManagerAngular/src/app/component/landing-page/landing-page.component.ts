@@ -7,4 +7,7 @@ import { Component } from '@angular/core';
 })
 export class LandingPageComponent {
 
+  currentYear: number = new Date().getFullYear();
+
+
 }

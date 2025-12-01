@@ -1,31 +1,41 @@
-﻿using TaskManagerDAL.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using TaskManagerDAL.Models;
 
 namespace TaskManagerDAL
 {
     public class TaskManagerRepository
     {
-        public TaskManagerDbContext Context { get; set; }
-        public TaskManagerRepository()
-        {
-            Context = new TaskManagerDbContext();
-        }
+    private readonly TaskManagerDbContext Context;
+
+    public TaskManagerRepository(TaskManagerDbContext context)
+    {
+        Context = context;
+    }
 
 
 
         public User Login(string email)
         {
+            //try
+            //{
+            //    var user = Context.Users.FirstOrDefault(u => u.Email == email);
+            //    if (user != null)
+            //    {
+            //        return user;
+            //    }
+            //    return null;
+            //}
+            //catch (Exception ex)
+            //{
+            //    return null;
+            //}
             try
             {
-                var user = Context.Users.FirstOrDefault(u => u.Email == email);
-                if (user != null)
-                {
-                    return user;
-                }
-                return null;
+                return Context.Users.FirstOrDefault(u => u.Email == email);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return null;
+                throw new Exception("Database login query failed: " + ex.Message, ex);
             }
         }
 
@@ -96,7 +106,7 @@ namespace TaskManagerDAL
 
         public int DeleteTask(int taskId)
         {
-            int result = 0;
+            int result = 0; //admin delete
             try
             {
                 var task = (from tasks in Context.Tasks
@@ -184,21 +194,45 @@ namespace TaskManagerDAL
             return users;
         }
 
-        public List<Models.Task> GetAllTasks()
+        //public List<Models.Task> GetAllTasks()
+        //{
+        //    List<Models.Task> tasks = new List<Models.Task>();
+        //    try
+        //    {
+        //        tasks = (from t in Context.Tasks
+        //                 where !t.IsDeleted
+        //                 select t).ToList();
+        //    }
+        //    catch (Exception)
+        //    {
+        //        tasks = null;
+        //    }
+        //    return tasks;
+        //}
+
+        public async Task<List<Models.Task>> GetTasksAsync(int pageNumber, int pageSize)
         {
-            List<Models.Task> tasks = new List<Models.Task>();
-            try
-            {
-                tasks = (from t in Context.Tasks
-                         where !t.IsDeleted
-                         select t).ToList();
-            }
-            catch (Exception)
-            {
-                tasks = null;
-            }
-            return tasks;
+            if (pageNumber < 1) pageNumber = 1;
+            if (pageSize < 1) pageSize = 10;
+
+            var query = Context.Tasks
+                               .AsNoTracking()
+                               .Where(t => !t.IsDeleted)
+                               .OrderBy(t => t.TaskId); // consistent ordering
+
+            return await query
+                         .Skip((pageNumber - 1) * pageSize)
+                         .Take(pageSize)
+                         .ToListAsync();
         }
+
+        public async Task<long> GetTotalTaskCountAsync()
+        {
+            return await Context.Tasks
+                                .Where(t => !t.IsDeleted)
+                                .LongCountAsync();
+        }
+
 
         public int deleteUser(int userId)
         {
@@ -253,8 +287,10 @@ namespace TaskManagerDAL
             List<Log> logs = new List<Log>();
             try
             {
-                logs = (from l in Context.Logs
-                        select l).ToList();
+                logs = Context.Logs
+            .OrderByDescending(l => l.TimeStamp)   // change to your actual timestamp column
+            .Take(10)
+            .ToList();
             }
             catch (Exception)
             {
@@ -262,5 +298,19 @@ namespace TaskManagerDAL
             }
             return logs;
         }
+
+        public void InsertApiLog(ApiLog log)
+        {
+            try
+            {
+                Context.ApiLogs.Add(log);
+                Context.SaveChanges();
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("will be added...");
+            }
+        }
+
     }
 }

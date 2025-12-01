@@ -45,6 +45,17 @@ export class AdminDashboardComponent implements OnInit {
   isLoading: boolean = false;
   userName: string | null = '';
 
+  // Pagination
+  pageNumber: number = 1;
+  pageSize: number = 10;
+  totalCount: number = 0;
+  totalPages: number = 0;
+
+  // Filters
+  selectedStatus: string = '';
+  selectedPriority: string = '';
+  selectedUser: string = '';
+
   summaryCards: SummaryCard[] = [
     { title: 'Total Users', icon: 'bi bi-people-fill', type: 'users', value: 0 },
     { title: 'Total Tasks', icon: 'bi bi-list-check', type: 'allTasks', value: 0 },
@@ -94,19 +105,27 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   loadTasksWithMapping(): void {
-    this.adminService.getAllTasks().subscribe({
-      next: (taskRes: Task[]) => {
+    this.adminService.getAllTasks(this.pageNumber, this.pageSize).subscribe({
+      next: (response) => {
+        const taskRes = response.body || [];
+
+        this.totalCount = Number(response.headers.get("X-Total-Count")) || 0;
+        this.totalPages = Math.ceil(this.totalCount / this.pageSize);
+
         this.tasks = taskRes.map(task => {
           const assignedUser = this.users.find(u => u.id === task.assignedTo);
           return {
             ...task,
-            assignedToName: assignedUser ? `${assignedUser.firstName} ${assignedUser.lastName}` : 'Unassigned'
+            assignedToName: assignedUser
+              ? `${assignedUser.firstName} ${assignedUser.lastName}`
+              : 'Unassigned'
           };
         });
 
-        this.summaryCards[1].value = this.tasks.length;
-        this.filteredTasks = [...this.tasks];
-        this.showView('users');
+        this.summaryCards[1].value = this.totalCount;
+
+        this.applyFilters();  // APPLY FILTERS AFTER FETCH
+
         this.isLoading = false;
       },
       error: () => {
@@ -115,6 +134,39 @@ export class AdminDashboardComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  // APPLY FILTERS
+  applyFilters(): void {
+    let result = [...this.tasks];
+
+    if (this.selectedStatus) {
+      result = result.filter(t => t.status === this.selectedStatus);
+    }
+
+    if (this.selectedPriority) {
+      result = result.filter(t => t.priority === this.selectedPriority);
+    }
+
+    if (this.selectedUser) {
+      result = result.filter(t => t.assignedToName === this.selectedUser);
+    }
+
+    this.filteredTasks = result;
+  }
+
+  nextPage(): void {
+    if (this.pageNumber < this.totalPages) {
+      this.pageNumber++;
+      this.loadTasksWithMapping();
+    }
+  }
+
+  previousPage(): void {
+    if (this.pageNumber > 1) {
+      this.pageNumber--;
+      this.loadTasksWithMapping();
+    }
   }
 
   newTask: Task = {
@@ -163,7 +215,7 @@ export class AdminDashboardComponent implements OnInit {
     this.activeView = view;
 
     if (view === 'allTasks') {
-      this.filteredTasks = [...this.tasks];
+      this.applyFilters();
     }
   }
 
@@ -180,6 +232,7 @@ export class AdminDashboardComponent implements OnInit {
       next: (res) => {
         this.users = this.users.filter(u => u.id !== userId);
         this.summaryCards[0].value = this.users.length;
+
         this.message = res?.message || 'User deleted successfully.';
         this.messageType = 'success';
       },
@@ -208,7 +261,6 @@ export class AdminDashboardComponent implements OnInit {
     });
   }
 
-  /** ⬇️ Load logs from API instead of dummy data */
   loadLogs(): void {
     this.adminService.getAllLogs().subscribe({
       next: (logRes: LogEntry[]) => {

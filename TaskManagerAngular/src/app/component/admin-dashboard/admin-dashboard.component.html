@@ -1,10 +1,10 @@
 <div class="admin-container container mt-4">
 
   <!-- Header -->
-  <div class="d-flex justify-content-between align-items-center mb-4">
+  <div class="admin-header d-flex justify-content-between align-items-center mb-4">
     <div>
       <h2 class="mb-0">Admin Dashboard</h2>
-      <h5 class="text-primary mt-1">Welcome, {{ userName }}</h5>
+      <h5 class="mt-1">Welcome, {{ userName }}</h5>
     </div>
 
     <button class="btn btn-outline-secondary" (click)="logout()">
@@ -26,13 +26,14 @@
     <div class="col-md-4 col-sm-6"
          *ngFor="let card of summaryCards"
          (click)="showView(card.type)">
-      <div class="card summary-card shadow-sm text-center"
+      <div class="card summary-card text-center"
            [ngClass]="{ 'active-card': activeView === card.type }">
         <div class="card-body">
           <i [class]="card.icon"></i>
           <h5 class="mt-2">{{ card.title }}</h5>
-          <p class="fs-5 fw-semibold text-dark mb-0">
-            {{ card.value || 0 }}
+          <p class="fs-5 fw-semibold"
+             [style.opacity]="(card.value ?? 0) > 0 ? '1' : '0'">
+            {{ card.value }}
           </p>
         </div>
       </div>
@@ -40,11 +41,11 @@
   </div>
 
   <!-- USERS TABLE -->
-  <div *ngIf="activeView === 'users'" class="card mb-4 shadow-sm">
+  <div *ngIf="activeView === 'users'" class="card mb-4">
     <div class="card-body">
 
       <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="mb-0">User Management</h5>
+        <h5>User Management</h5>
         <button class="btn btn-sm btn-primary" (click)="refreshUsers()">
           <i class="bi bi-arrow-clockwise"></i> Refresh
         </button>
@@ -53,7 +54,7 @@
       <div *ngIf="users.length > 0; else noUsers">
         <div class="table-responsive">
           <table class="table table-hover align-middle">
-            <thead class="table-light">
+            <thead>
               <tr>
                 <th>#</th>
                 <th>Name</th>
@@ -68,13 +69,8 @@
                 <td>{{ user.firstName }} {{ user.lastName }}</td>
                 <td>{{ user.email }}</td>
                 <td>
-                  <span class="badge"
-                        [ngClass]="{
-                          'bg-success': user.role === 'Admin',
-                          'bg-info': user.role === 'User'
-                        }">
-                    {{ user.role }}
-                  </span>
+                  <span *ngIf="user.role==='Admin'" class="role-badge admin">Admin</span>
+                  <span *ngIf="user.role==='User'" class="role-badge user">User</span>
                 </td>
                 <td>
                   <button class="btn btn-sm btn-warning me-2"
@@ -99,16 +95,52 @@
     </div>
   </div>
 
-  <!-- TASKS TABLE (ALWAYS ALL TASKS) -->
-  <div *ngIf="activeView === 'allTasks'" class="card mb-4 shadow-sm">
+  <!-- TASKS TABLE WITH FILTERS -->
+  <div *ngIf="activeView === 'allTasks'" class="card mb-4">
     <div class="card-body">
 
       <h5 class="mb-3">All Tasks</h5>
 
+      <!-- Filters -->
+      <div class="row mb-4">
+
+        <div class="col-md-4 mb-2">
+          <label>Status</label>
+          <select class="form-select" [(ngModel)]="selectedStatus" (change)="applyFilters()">
+            <option value="">All</option>
+            <option>Pending</option>
+            <option>In Progress</option>
+            <option>Completed</option>
+          </select>
+        </div>
+
+        <div class="col-md-4 mb-2">
+          <label>Priority</label>
+          <select class="form-select" [(ngModel)]="selectedPriority" (change)="applyFilters()">
+            <option value="">All</option>
+            <option>Low</option>
+            <option>Medium</option>
+            <option>High</option>
+          </select>
+        </div>
+
+        <div class="col-md-4 mb-2">
+          <label>Assigned To</label>
+          <select class="form-select" [(ngModel)]="selectedUser" (change)="applyFilters()">
+            <option value="">All</option>
+            <option *ngFor="let u of users">
+              {{ u.firstName }} {{ u.lastName }}
+            </option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- Tasks Table -->
       <div *ngIf="filteredTasks.length > 0; else noTasks">
         <div class="table-responsive">
           <table class="table table-hover align-middle">
-            <thead class="table-light">
+            <thead>
               <tr>
                 <th>#</th>
                 <th>Title</th>
@@ -119,26 +151,41 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let task of filteredTasks; let i = index">
-                <td>{{ i + 1 }}</td>
-                <td>{{ task.title }}</td>
+              <tr *ngFor="let t of filteredTasks; let i = index">
+                <td>{{ (pageNumber - 1) * pageSize + (i + 1) }}</td>
+                <td>{{ t.title }}</td>
+
                 <td>
-                  <span class="badge"
-                        [ngClass]="{
-                          'bg-success': task.status === 'Completed',
-                          'bg-warning text-dark': task.status === 'Pending',
-                          'bg-info text-dark': task.status === 'In Progress'
-                        }">
-                    {{ task.status }}
-                  </span>
+                  <span class="status-badge completed" *ngIf="t.status === 'Completed'">Completed</span>
+                  <span class="status-badge pending" *ngIf="t.status === 'Pending'">Pending</span>
+                  <span class="status-badge inprogress" *ngIf="t.status === 'In Progress'">In Progress</span>
                 </td>
-                <td>{{ task.priority }}</td>
-                <td>{{ task.dueDate | date: 'mediumDate' }}</td>
-                <td>{{ task.assignedToName }}</td>
+
+                <td>{{ t.priority }}</td>
+                <td>{{ t.dueDate | date: 'mediumDate' }}</td>
+                <td>{{ t.assignedToName }}</td>
               </tr>
             </tbody>
           </table>
         </div>
+
+        <!-- Pagination -->
+        <div class="d-flex justify-content-between align-items-center mt-3">
+          <button class="btn btn-outline-primary"
+                  [disabled]="pageNumber===1"
+                  (click)="previousPage()">
+            <i class="bi bi-arrow-left"></i> Previous
+          </button>
+
+          <span>Page {{ pageNumber }} of {{ totalPages }}</span>
+
+          <button class="btn btn-outline-primary"
+                  [disabled]="pageNumber===totalPages"
+                  (click)="nextPage()">
+            Next <i class="bi bi-arrow-right"></i>
+          </button>
+        </div>
+
       </div>
 
       <ng-template #noTasks>
@@ -149,7 +196,7 @@
   </div>
 
   <!-- ASSIGN TASK FORM -->
-  <div *ngIf="activeView === 'assigntask'" class="card shadow-sm mb-4">
+  <div *ngIf="activeView === 'assigntask'" class="card mb-4">
     <div class="card-body">
 
       <h5 class="mb-3">Assign New Task</h5>
@@ -157,17 +204,17 @@
       <form (ngSubmit)="assignTask()">
 
         <div class="mb-3">
-          <label class="form-label">Title</label>
+          <label>Title</label>
           <input type="text" class="form-control" [(ngModel)]="newTask.title" name="title" required>
         </div>
 
         <div class="mb-3">
-          <label class="form-label">Description</label>
+          <label>Description</label>
           <textarea class="form-control" [(ngModel)]="newTask.description" name="description"></textarea>
         </div>
 
         <div class="mb-3">
-          <label class="form-label">Priority</label>
+          <label>Priority</label>
           <select class="form-select" [(ngModel)]="newTask.priority" name="priority">
             <option>Low</option>
             <option>Medium</option>
@@ -176,7 +223,7 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label">Status</label>
+          <label>Status</label>
           <select class="form-select" [(ngModel)]="newTask.status" name="status">
             <option>Pending</option>
             <option>In Progress</option>
@@ -185,12 +232,12 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label">Due Date</label>
+          <label>Due Date</label>
           <input type="date" class="form-control" [(ngModel)]="newTask.dueDate" name="dueDate" required>
         </div>
 
         <div class="mb-3">
-          <label class="form-label">Assign To</label>
+          <label>Assign To</label>
           <select class="form-select" [(ngModel)]="newTask.assignedTo" name="assignedTo" required>
             <option value="">Select user</option>
             <option *ngFor="let u of users" [value]="u.id">
@@ -199,7 +246,7 @@
           </select>
         </div>
 
-        <button class="btn btn-primary" type="submit">Assign Task</button>
+        <button class="btn btn-primary w-100" type="submit">Assign Task</button>
 
       </form>
 
@@ -207,21 +254,21 @@
   </div>
 
   <!-- ACTIVITY LOGS -->
-  <div class="card shadow-sm">
+  <div class="card">
     <div class="card-body">
 
       <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="mb-0">Recent Activity Logs</h5>
+        <h5>Recent Activity Logs</h5>
         <button class="btn btn-sm btn-outline-primary" (click)="loadLogs()">
           <i class="bi bi-arrow-clockwise"></i> Refresh
         </button>
       </div>
 
       <ul class="list-group">
-        <li class="list-group-item d-flex justify-content-between align-items-center"
+        <li class="list-group-item d-flex justify-content-between"
             *ngFor="let log of logs">
           <span>{{ log.message }}</span>
-          <small class="text-muted">{{ log.timeStamp | date: 'short' }}</small>
+          <small>{{ log.timeStamp | date: 'short' }}</small>
         </li>
       </ul>
 

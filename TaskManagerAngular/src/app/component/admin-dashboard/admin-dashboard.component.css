@@ -1,179 +1,264 @@
-/* Overall Container */
+/* ------------------------------------
+   ROOT THEME COLORS (Premium Minimalist)
+------------------------------------ */
+:root {
+  --primary: #0d6efd;
+  --primary-hover: #0b5ed7;
+  --primary-light: #eaf2ff;
+  --bg-body: #f7f8fa;
+  --bg-card: #ffffff;
+  --bg-table-header: #f1f2f4;
+  --border: #e5e7eb;
+  --border-dark: #d1d5db;
+  --text-dark: #1f2937;
+  --text-medium: #4b5563;
+  --text-light: #6b7280;
+  --success: #16a34a;
+  --success-light: #e7f7ec;
+  --warning: #f59e0b;
+  --warning-light: #fef6e7;
+  --danger: #dc2626;
+  --danger-light: #fde7e7;
+  --info: #0ea5e9;
+  --info-light: #e8f7ff;
+}
+
+/* ------------------------------------
+   PAGE WRAPPER
+------------------------------------ */
 .admin-container {
   min-height: 100vh;
-  padding-bottom: 2rem;
-  background: #f8f9fa;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding-bottom: 40px;
+  background: var(--bg-body);
+  font-family: "Inter", "Segoe UI", sans-serif;
 }
 
 /* Header */
-h2 {
-  font-weight: 700;
-  color: #333;
+.admin-header h2 {
+  font-weight: 600;
+  color: var(--text-dark);
 }
 
-/* Summary Cards */
+.admin-header h5 {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+/* ------------------------------------
+   SUMMARY CARDS
+------------------------------------ */
 .summary-card {
+  background: var(--bg-card);
   border-radius: 12px;
-  background: #fff;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
+  border: 1px solid var(--border);
   cursor: pointer;
-  border: 2px solid transparent;
+  transition: all 0.22s ease;
 }
 
   .summary-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+    transform: translateY(-3px);
   }
 
   .summary-card i {
     font-size: 2rem;
-    color: #2575fc;
+    color: var(--primary);
   }
 
   .summary-card h5 {
+    font-size: 1.15rem;
     font-weight: 600;
-    color: #333;
+    margin-top: 10px;
   }
 
   .summary-card p {
-    margin-bottom: 0;
-    color: #000;
-  }
-
-/* 🔹 Highlight the active summary card */
-.active-card {
-  border-color: #2575fc;
-  background-color: #eef5ff;
-  box-shadow: 0 0 12px rgba(37, 117, 252, 0.3);
-  transform: translateY(-2px);
-}
-
-/* Table Styling */
-.card {
-  border-radius: 12px;
-  border: none;
-}
-
-.table {
-  margin-bottom: 0;
-}
-
-  .table th {
-    color: #333;
+    margin: 0;
+    font-size: 1.4rem;
     font-weight: 600;
-    background-color: #f1f4f9;
+    color: var(--text-dark);
   }
 
-  .table td {
-    vertical-align: middle;
-    font-size: 0.95rem;
-  }
+/* Active card highlight */
+.active-card {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  box-shadow: 0 0 12px rgba(13,110,253,0.25);
+}
+
+/* ------------------------------------
+   CARDS (Tables, Forms)
+------------------------------------ */
+.card {
+  background: var(--bg-card);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+/* ------------------------------------
+   TABLES
+------------------------------------ */
+.table thead {
+  background: var(--bg-table-header);
+}
+
+.table th {
+  font-weight: 600;
+  color: var(--text-dark);
+  font-size: 0.95rem;
+}
+
+.table td {
+  color: var(--text-medium);
+  font-size: 0.92rem;
+}
 
 .table-hover tbody tr:hover {
-  background-color: #f8fbff;
+  background: #f6f8fa;
 }
 
-/* Buttons */
-.btn-warning {
-  background-color: #ffc107;
-  color: #222;
-  border: none;
-  transition: background-color 0.2s ease;
+/* ------------------------------------
+   FILTER SELECTS
+------------------------------------ */
+.form-select,
+.form-control {
+  border: 1px solid var(--border-dark);
+  padding: 0.45rem 0.6rem;
+  border-radius: 7px;
+  background: #fff;
+  color: var(--text-medium);
 }
 
-  .btn-warning:hover {
-    background-color: #e0a800;
+  .form-select:focus,
+  .form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(13,110,253,0.15);
   }
 
-.btn-danger {
-  background-color: #dc3545;
-  border: none;
-  transition: background-color 0.2s ease;
+/* ------------------------------------
+   BUTTONS
+------------------------------------ */
+button {
+  border-radius: 8px !important;
 }
 
-  .btn-danger:hover {
-    background-color: #b52a34;
+/* Primary Button */
+.btn-primary {
+  background: var(--primary);
+  border: none;
+}
+
+  .btn-primary:hover {
+    background: var(--primary-hover);
   }
 
+/* Outline */
 .btn-outline-secondary {
-  border-color: #ccc;
-  color: #444;
-  transition: all 0.2s ease;
+  border-color: var(--border-dark);
+  color: var(--text-medium);
 }
 
   .btn-outline-secondary:hover {
-    background-color: #f1f1f1;
+    background: #ececec;
   }
 
-/* Activity Logs */
-.list-group-item {
-  border: none;
-  border-bottom: 1px solid #e6e6e6;
-  padding: 0.75rem 1rem;
+/* Pagination */
+.btn-outline-primary {
+  border-color: var(--primary);
+  color: var(--primary);
 }
 
-  .list-group-item:last-child {
-    border-bottom: none;
+  .btn-outline-primary:hover {
+    background: var(--primary-light);
   }
 
+/* Danger */
+.btn-danger {
+  background: var(--danger);
+  color: #fff;
+}
+
+  .btn-danger:hover {
+    background: #b91c1c;
+  }
+
+/* Warning */
+.btn-warning {
+  background: var(--warning);
+  color: #fff;
+}
+
+  .btn-warning:hover {
+    background: #d97706;
+  }
+
+/* ------------------------------------
+   BADGES (Modern Minimal Style)
+------------------------------------ */
+.role-badge,
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  display: inline-block;
+  border: 1px solid transparent;
+}
+
+  /* User Roles */
+  .role-badge.admin {
+    background: var(--primary-light);
+    color: var(--primary);
+    border-color: #c9ddff;
+  }
+
+  .role-badge.user {
+    background: #f3f4f6;
+    color: var(--text-medium);
+    border-color: var(--border-dark);
+  }
+
+  /* Task Status */
+  .status-badge.completed {
+    background: var(--success-light);
+    color: var(--success);
+    border-color: #b6e7c2;
+  }
+
+  .status-badge.pending {
+    background: var(--warning-light);
+    color: var(--warning);
+    border-color: #f1d199;
+  }
+
+  .status-badge.inprogress {
+    background: var(--info-light);
+    color: var(--info);
+    border-color: #bfeaff;
+  }
+
+/* ------------------------------------
+   LOGS
+------------------------------------ */
+.list-group-item {
+  border: none;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+}
+
   .list-group-item span {
-    font-size: 0.95rem;
-    color: #333;
+    color: var(--text-dark);
   }
 
   .list-group-item small {
-    font-size: 0.8rem;
-    color: #777;
+    color: var(--text-light);
   }
 
-/* Message Alert */
-.alert {
-  border-radius: 10px;
-  margin-top: 1rem;
-  text-align: center;
-  font-weight: 500;
-}
-
-/* Smooth transitions between tables */
-.card-body {
-  transition: opacity 0.3s ease;
-}
-
-/* Responsive Adjustments */
-@media (max-width: 992px) {
-  .summary-card {
-    margin-bottom: 1rem;
-  }
-
-    .summary-card i {
-      font-size: 1.6rem;
-    }
-
-    .summary-card h5 {
-      font-size: 1rem;
-    }
-
-    .summary-card p {
-      font-size: 0.9rem;
-    }
-
-  .table td, .table th {
-    font-size: 0.85rem;
-  }
-}
-
+/* ------------------------------------
+   RESPONSIVE
+------------------------------------ */
 @media (max-width: 576px) {
-  .admin-container {
-    padding: 1rem;
-  }
-
   h2 {
-    font-size: 1.4rem;
-  }
-
-  .btn-outline-secondary {
-    padding: 0.3rem 0.6rem;
-    font-size: 0.85rem;
+    font-size: 1.25rem;
   }
 }

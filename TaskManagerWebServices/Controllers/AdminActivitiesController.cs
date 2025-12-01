@@ -34,12 +34,12 @@ namespace TaskManagerWebServices.Controllers
         {
             try
             {
-                _logger.LogInformation("Admin requested all users.");
+                //_logger.LogInformation("Admin requested all users.");
 
                 var users = _repository.GetAllUsers();
                 if (users != null)
                 {
-                    _logger.LogInformation($"Fetched {users.Count} users successfully.");
+                    //_logger.LogInformation($"Fetched {users.Count} users successfully.");
                     return Ok(users);
                 }
                 else
@@ -55,32 +55,71 @@ namespace TaskManagerWebServices.Controllers
             }
         }
 
+        //[HttpGet]
+        //[Authorize(Roles = "Admin")]
+        //public IActionResult GetAllTasks()
+        //{
+        //    try
+        //    {
+        //        _logger.LogInformation("Admin requested all tasks.");
+
+        //        var tasks = _repository.GetAllTasks();
+        //        if (tasks != null)
+        //        {
+        //            _logger.LogInformation($"Fetched {tasks.Count} tasks successfully.");
+        //            return Ok(tasks);
+        //        }
+        //        else
+        //        {
+        //            _logger.LogWarning("No tasks found.");
+        //            return NotFound("No tasks found");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError("LogError in GetAllTasks: " + ex.Message);
+        //        return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+        //    }
+        //}
+
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public IActionResult GetAllTasks()
+        public async Task<IActionResult> GetAllTasks(int pageNumber = 1, int pageSize = 10)
         {
             try
             {
-                _logger.LogInformation("Admin requested all tasks.");
+                //_logger.LogInformation(
+                //    "Admin requested tasks with pagination: pageNumber={PageNumber}, pageSize={PageSize}",
+                //    pageNumber, pageSize);
 
-                var tasks = _repository.GetAllTasks();
-                if (tasks != null)
+                var tasks = await _repository.GetTasksAsync(pageNumber, pageSize);
+                var totalCount = await _repository.GetTotalTaskCountAsync();
+
+                if (tasks == null || tasks.Count == 0)
                 {
-                    _logger.LogInformation($"Fetched {tasks.Count} tasks successfully.");
-                    return Ok(tasks);
-                }
-                else
-                {
-                    _logger.LogWarning("No tasks found.");
+                    //_logger.LogWarning("No tasks found for the given page.");
                     return NotFound("No tasks found");
                 }
+
+                // Add pagination metadata
+                Response.Headers.Append("X-Total-Count", totalCount.ToString());
+                Response.Headers.Append("X-Page-Number", pageNumber.ToString());
+                Response.Headers.Append("X-Page-Size", pageSize.ToString());
+
+                // ⭐ Mandatory for Angular to read headers
+                Response.Headers.Append("Access-Control-Expose-Headers",
+                                        "X-Total-Count,X-Page-Number,X-Page-Size");
+
+                return Ok(tasks);
             }
             catch (Exception ex)
             {
-                _logger.LogError("LogError in GetAllTasks: " + ex.Message);
+                _logger.LogError(ex, "Error in GetAllTasks");
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
+
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
@@ -89,7 +128,7 @@ namespace TaskManagerWebServices.Controllers
             try
             {
                 int adminId = GetUserIdFromClaims();
-                _logger.LogInformation($"Admin {adminId} attempting to assign a task to User {taskModel.AssignedTo}");
+                //_logger.LogInformation($"Admin {adminId} attempting to assign a task to User {taskModel.AssignedTo}");
 
                 var task = new TaskManagerDAL.Models.Task
                 {
@@ -109,7 +148,7 @@ namespace TaskManagerWebServices.Controllers
 
                 if (taskId > 0)
                 {
-                    _logger.LogInformation($"Task '{task.Title}' assigned successfully by Admin {adminId}.");
+                    _logger.LogInformation($"Task '{task.Title}' assigned successfully by Admin {adminId} to user {taskModel.AssignedTo}.");
                     return Ok(new { task });
                 }
                 else
@@ -132,7 +171,7 @@ namespace TaskManagerWebServices.Controllers
             try
             {
                 int adminId = GetUserIdFromClaims();
-                _logger.LogInformation($"Admin {adminId} attempting to delete user with ID {userId}");
+                //_logger.LogInformation($"Admin {adminId} attempting to delete user with ID {userId}");
 
                 if (adminId == -99)
                 {
@@ -172,7 +211,7 @@ namespace TaskManagerWebServices.Controllers
             try
             {
                 int adminId = GetUserIdFromClaims();
-                _logger.LogInformation($"Admin {adminId} attempting to update role of User {userId} to {newRole}");
+                //_logger.LogInformation($"Admin {adminId} attempting to update role of User {userId} to {newRole}");
 
                 if (adminId == -99)
                 {
@@ -206,7 +245,7 @@ namespace TaskManagerWebServices.Controllers
         {
             try
             {
-                _logger.LogInformation("Admin requested system logs.");
+                //_logger.LogInformation("Admin requested system logs.");
                 var logs = _repository.GetLogs();
                 if (logs != null)
                 {
@@ -230,7 +269,7 @@ namespace TaskManagerWebServices.Controllers
             try
             {
                 int adminId = GetUserIdFromClaims();
-                _logger.LogInformation($"Admin {adminId} attempting to delete task with ID {taskId}");
+                //_logger.LogInformation($"Admin {adminId} attempting to delete task with ID {taskId}");
                 if (adminId == -99)
                 {
                     _logger.LogWarning("Invalid admin user claims while deleting task.");

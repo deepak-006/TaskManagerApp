@@ -1,1 +1,83 @@
-<p>landing-page works!</p>
+<div class="landing-container">
+
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title">Organize Tasks. Empower Productivity.</h1>
+      <p class="hero-subtitle">
+        A clean, modern task manager built to help teams and individuals stay focused,
+        organized, and in control — anytime, anywhere.
+      </p>
+
+      <div class="hero-buttons">
+        <a routerLink="/login" class="btn-primary hero-btn">Login</a>
+        <a routerLink="/signup" class="btn-outline hero-btn">Create Account</a>
+      </div>
+    </div>
+
+    <div class="hero-image-wrapper">
+      <img src="../../../assets/landing/hero.jpg" class="hero-image" alt="Task Management Illustration">
+      <div class="hero-image-fade"></div>
+    </div>
+  </section>
+
+
+
+
+
+  <!-- FEATURES SECTION -->
+  <section class="features">
+    <h2 class="section-title">Why Choose Us?</h2>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <i class="bi bi-kanban"></i>
+        <h3>Smart Task Management</h3>
+        <p>Create, edit, assign, and monitor tasks with ease using a clean modern dashboard.</p>
+      </div>
+
+      <div class="feature-card">
+        <i class="bi bi-people"></i>
+        <h3>User & Admin Roles</h3>
+        <p>Admins manage users and tasks effortlessly. Users stay productive with clarity.</p>
+      </div>
+
+      <div class="feature-card">
+        <i class="bi bi-speedometer2"></i>
+        <h3>Fast & Intuitive</h3>
+        <p>Minimal UI, smooth interactions, and a theme designed for clarity and speed.</p>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- FULL WIDTH PREVIEW SECTION -->
+  <section class="preview">
+    <img src="assets/landing/dashboard.jpg"
+         alt="Dashboard Preview"
+         class="preview-image">
+
+    <div class="preview-text">
+      <h2>A Dashboard You’ll Love</h2>
+      <p>Clean, powerful, and built to help you stay organized.</p>
+    </div>
+  </section>
+
+
+
+  <!-- FINAL CTA -->
+  <section class="cta">
+    <h2>Ready to take control of your tasks?</h2>
+    <p>Your productivity journey starts here.</p>
+    <a routerLink="/signup" class="btn-primary cta-btn">Get Started</a>
+  </section>
+
+
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© {{ currentYear }} TaskManager — Deepak Baidya</p>
+  </footer>
+
+</div>

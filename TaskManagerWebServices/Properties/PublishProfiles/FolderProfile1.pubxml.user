@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- https://go.microsoft.com/fwlink/?LinkID=208121. -->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>C:\Users\DELL\source\repos\TaskManagerApp\TaskManagerWebServices\bin\Release\net8.0\publish\</_PublishTargetUrl>
+    <History>True|2025-11-23T12:33:10.8685572Z||;True|2025-11-23T17:58:00.5269780+05:30||;True|2025-11-23T17:12:11.5682614+05:30||;True|2025-11-23T17:11:59.5778583+05:30||;True|2025-11-23T14:45:15.2271090+05:30||;True|2025-11-23T14:30:21.5118751+05:30||;True|2025-11-23T14:24:16.0316567+05:30||;True|2025-11-23T13:50:27.7072693+05:30||;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>

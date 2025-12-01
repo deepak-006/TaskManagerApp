@@ -1,86 +1,138 @@
-/* Center the login card */
+/* ------------------------------------
+   Login Background Wrapper
+------------------------------------ */
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  background: linear-gradient( 135deg, var(--primary) 0%, #4c8dff 50%, var(--primary-hover) 100% );
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Card styling */
+/* ------------------------------------
+   Login Card
+------------------------------------ */
 .login-card {
-  background-color: #fff;
-  padding: 2rem 2.5rem;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-  width: 350px;
+  background: var(--bg-card);
+  padding: 2.5rem;
+  width: 380px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.12);
   text-align: center;
-  transition: transform 0.2s ease-in-out;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
   .login-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 26px rgba(0,0,0,0.16);
   }
 
-/* Title */
+/* ------------------------------------
+   Titles
+------------------------------------ */
 .login-title {
-  margin-bottom: 1.5rem;
-  color: #333;
-  font-weight: 600;
-  font-size: 1.8rem;
+  font-size: 1.9rem;
+  color: var(--text-dark);
+  font-weight: 700;
+  margin-bottom: 0.4rem;
 }
 
-/* Form inputs */
+.login-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-light);
+  margin-bottom: 1.8rem;
+}
+
+/* ------------------------------------
+   Form Fields
+------------------------------------ */
 .form-group {
-  margin-bottom: 1rem;
+  margin-bottom: 1.2rem;
   text-align: left;
 }
 
   .form-group label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-medium);
     display: block;
-    font-size: 0.9rem;
-    color: #555;
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.35rem;
   }
 
   .form-group input {
     width: 100%;
-    padding: 0.55rem 0.8rem;
-    border: 1px solid #ccc;
+    padding: 0.65rem 0.85rem;
     border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #fafafa;
     font-size: 0.95rem;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
 
     .form-group input:focus {
-      border-color: #2575fc;
+      border-color: var(--primary);
       outline: none;
-      box-shadow: 0 0 5px rgba(37, 117, 252, 0.3);
+      background: #fff;
+      box-shadow: 0 0 6px rgba(13, 110, 253, 0.25);
     }
 
-/* Button */
+/* ------------------------------------
+   Login Button
+------------------------------------ */
 .login-btn {
   width: 100%;
-  padding: 0.6rem;
-  background-color: #2575fc;
+  padding: 0.7rem;
+  background: var(--primary);
   border: none;
-  border-radius: 8px;
-  color: #fff;
+  border-radius: 10px;
+  color: white;
   font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.3s;
+  font-weight: 600;
+  transition: background 0.25s ease, transform 0.1s ease;
 }
 
   .login-btn:hover {
-    background-color: #0059c1;
+    background: var(--primary-hover);
+    transform: translateY(-2px);
   }
 
-/* Message */
+/* ------------------------------------
+   Error Message
+------------------------------------ */
 .login-message {
   margin-top: 1rem;
-  color: #e74c3c;
-  font-weight: 500;
   font-size: 0.95rem;
+  color: var(--danger);
+  background: var(--danger-light);
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--danger);
+  font-weight: 500;
 }
+
+/* Subtitle under login title */
+.login-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-light);
+  margin-top: -8px;
+  margin-bottom: 1.6rem;
+}
+
+/* Signup redirect text */
+.signup-redirect {
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  color: var(--text-light);
+}
+
+  .signup-redirect a {
+    text-decoration: none;
+    color: var(--primary);
+    font-weight: 600;
+  }
+
+    .signup-redirect a:hover {
+      text-decoration: underline;
+    }

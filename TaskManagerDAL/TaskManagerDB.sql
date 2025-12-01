@@ -38,6 +38,23 @@ CREATE TABLE Tasks (
 );
 GO
 
+
+CREATE TABLE ApiLogs (
+    LogId INT IDENTITY(1,1) PRIMARY KEY,
+    HttpMethod NVARCHAR(10),
+    Path NVARCHAR(500),
+    QueryString NVARCHAR(MAX),
+    RequestBody NVARCHAR(MAX),
+    ResponseBody NVARCHAR(MAX),
+    StatusCode INT,
+    DurationMs BIGINT,
+    IpAddress NVARCHAR(50),
+    Timestamp DATETIME DEFAULT GETDATE()
+);
+GO
+
+
+
 SELECT * FROM Users
 GO
 
@@ -45,9 +62,10 @@ GO
 SELECT * FROM Tasks
 GO
 
-SELECT * FROM Logs
+SELECT * FROM ApiLogs
 
-drop table Logs
+--drop table Logs
+
 
 ----
 --drop table users

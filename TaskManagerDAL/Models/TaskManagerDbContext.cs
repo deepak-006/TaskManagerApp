@@ -15,18 +15,34 @@ public partial class TaskManagerDbContext : DbContext
     {
     }
 
+    public virtual DbSet<ApiLog> ApiLogs { get; set; }
+
     public virtual DbSet<Log> Logs { get; set; }
 
     public virtual DbSet<Task> Tasks { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source =(localdb)\\MSSQLLocalDB; Initial Catalog=TaskManagerDB; Integrated Security=true");
+    //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+    //        => optionsBuilder.UseSqlServer("Data Source =(localdb)\\MSSQLLocalDB; Initial Catalog=TaskManagerDB; Integrated Security=true");
 
+
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<ApiLog>(entity =>
+        {
+            entity.HasKey(e => e.LogId).HasName("PK__ApiLogs__5E548648C89510A5");
+
+            entity.Property(e => e.HttpMethod).HasMaxLength(10);
+            entity.Property(e => e.IpAddress).HasMaxLength(50);
+            entity.Property(e => e.Path).HasMaxLength(500);
+            entity.Property(e => e.Timestamp)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+        });
+
         modelBuilder.Entity<Log>(entity =>
         {
             entity.Property(e => e.TimeStamp).HasColumnType("datetime");

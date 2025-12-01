@@ -4,9 +4,10 @@ import { LoginComponent } from './component/login/login.component';
 import { SignupComponent } from './component/signup/signup.component'; 
 import { DashboardComponent } from './component/dashboard/dashboard.component';
 import { AdminDashboardComponent } from './component/admin-dashboard/admin-dashboard.component';
+import { LandingPageComponent } from './component/landing-page/landing-page.component'; 
 
 const routes: Routes = [
-  { path: '', component: LoginComponent },
+  { path: '', component: LandingPageComponent },
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'dashboard', component: DashboardComponent },

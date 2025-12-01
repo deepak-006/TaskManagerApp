@@ -1,0 +1,24 @@
+2025-11-23 13:48:26.136 +05:30 [INF] User logged in successfully with emailId: deepakzbaidya@gmail.com.
+2025-11-23 13:48:26.711 +05:30 [INF] User 3 requested their tasks.
+2025-11-23 13:48:26.949 +05:30 [INF] Fetched 3 tasks for user 3.
+2025-11-23 13:48:36.900 +05:30 [INF] User logged in successfully with emailId: user.
+2025-11-23 13:48:36.936 +05:30 [INF] User 2 requested their tasks.
+2025-11-23 13:48:36.941 +05:30 [INF] Fetched 10 tasks for user 2.
+2025-11-23 14:01:22.788 +05:30 [INF] User logged in successfully with emailId: user.
+2025-11-23 14:17:07.218 +05:30 [WRN] User not found for string.
+2025-11-23 14:17:20.550 +05:30 [INF] User logged in successfully with emailId: user.
+2025-11-23 14:17:35.989 +05:30 [INF] User logged in successfully with emailId: deepakzbaidya@gmail.com.
+2025-11-23 14:32:29.858 +05:30 [INF] User 2 requested their tasks.
+2025-11-23 14:32:30.563 +05:30 [INF] Fetched 10 tasks for user 2.
+2025-11-23 14:32:35.450 +05:30 [INF] User 3 requested their tasks.
+2025-11-23 14:32:35.504 +05:30 [INF] Fetched 3 tasks for user 3.
+2025-11-23 14:32:58.588 +05:30 [WRN] User not found for string.
+2025-11-23 14:33:33.982 +05:30 [INF] User logged in successfully with emailId: user.
+2025-11-23 14:38:13.638 +05:30 [INF] User 2 requested their tasks.
+2025-11-23 14:38:13.642 +05:30 [INF] Fetched 10 tasks for user 2.
+2025-11-23 16:24:39.143 +05:30 [ERR] Error occured while logging inDatabase login query failed: No database provider has been configured for this DbContext. A provider can be configured by overriding the 'DbContext.OnConfiguring' method or by using 'AddDbContext' on the application service provider. If 'AddDbContext' is used, then also ensure that your DbContext type accepts a DbContextOptions<TContext> object in its constructor and passes it to the base constructor for DbContext.
+2025-11-23 16:27:53.216 +05:30 [WRN] User not found for string.
+2025-11-23 16:28:06.177 +05:30 [INF] User logged in successfully with emailId: user.
+2025-11-23 17:09:19.568 +05:30 [WRN] User not found for user.
+2025-11-23 17:10:19.010 +05:30 [INF] User User successfully created with emailId: deepakzbaidya@gmail.com.
+2025-11-23 17:10:38.965 +05:30 [INF] User logged in successfully with emailId: deepakzbaidya@gmail.com.

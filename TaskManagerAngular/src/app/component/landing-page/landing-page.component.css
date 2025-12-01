@@ -1,0 +1,336 @@
+/* ====================================
+   ROOT THEME COLORS
+===================================== */
+:root {
+  --primary: #2575fc;
+  --primary-hover: #1d5fcc;
+  --bg-body: #f6f7fb;
+  --bg-card: #ffffff;
+  --text-dark: #1f2937;
+  --text-medium: #4b5563;
+  --text-light: #6b7280;
+  --border: #e5e7eb;
+}
+
+
+/* ====================================
+   BASE RESET
+===================================== */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+  background: var(--bg-body);
+}
+
+.landing-container {
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", sans-serif;
+  overflow-x: hidden;
+}
+
+
+/* ====================================
+   HERO SECTION — FULL SCREEN (UPDATED)
+===================================== */
+.hero {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background: var(--bg-body);
+}
+
+/* LEFT TEXT FLOATING */
+.hero-content {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 60%; /* requested 60% width */
+  max-width: 800px;
+  padding-left: 4rem;
+  z-index: 10; /* text stays above image */
+}
+
+.hero-title {
+  font-size: 3.4rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  line-height: 1.2;
+  max-width: 80%;
+}
+
+.hero-subtitle {
+  font-size: 1.3rem; /* slightly bigger */
+  line-height: 1.6;
+  color: var(--text-medium);
+  margin: 1rem 0 2rem;
+  max-width: 78%;
+}
+
+/* HERO BUTTONS */
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn-primary {
+  background: var(--primary);
+  padding: 0.75rem 1.7rem;
+  border-radius: 8px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: 0.25s ease;
+  z-index: 10;
+}
+
+  .btn-primary:hover {
+    background: var(--primary-hover);
+  }
+
+.btn-outline {
+  border: 2px solid var(--primary);
+  padding: 0.7rem 1.6rem;
+  border-radius: 8px;
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.25s ease;
+  z-index: 10;
+}
+
+  .btn-outline:hover {
+    background: var(--primary);
+    color: #fff;
+  }
+
+
+/* ====================================
+   HERO IMAGE (70% width) — UPDATED
+===================================== */
+.hero-image-wrapper {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 70%; /* EXACT 70% image section */
+  height: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* no cropping */
+  display: block;
+}
+
+/* LEFT FADE EFFECT */
+.hero-image-fade {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 35%;
+  height: 100%;
+  background: linear-gradient( to right, var(--bg-body) 0%, rgba(246, 247, 251, 0.75) 40%, rgba(255, 255, 255, 0) 100% );
+  pointer-events: none;
+  z-index: 5; /* above image but below text */
+}
+
+
+
+/* ====================================
+   FEATURES SECTION
+===================================== */
+.features {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: var(--text-dark);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.feature-card {
+  background: var(--bg-card);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.07);
+  transition: 0.2s ease;
+}
+
+  .feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.10);
+  }
+
+  .feature-card i {
+    font-size: 2rem;
+    color: var(--primary);
+  }
+
+  .feature-card h3 {
+    margin-top: 1rem;
+    font-weight: 600;
+  }
+
+  .feature-card p {
+    margin-top: 0.5rem;
+    color: var(--text-medium);
+  }
+
+
+/* ====================================
+   PREVIEW SECTION — Image with overlay text
+===================================== */
+.preview {
+  position: relative;
+  width: 100%;
+  margin: 4rem 0;
+  display: flex;
+  justify-content: center;
+}
+
+.preview-image {
+  width: 80%;
+  height: auto;
+  border-radius: 14px;
+}
+
+.preview-text {
+  position: absolute;
+  top: 12%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  text-align: center;
+  color: #fff;
+  max-width: 80%;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.55);
+}
+
+  .preview-text h2 {
+    font-size: 2.4rem;
+    font-weight: 700;
+  }
+
+  .preview-text p {
+    font-size: 1.15rem;
+  }
+
+
+/* ====================================
+   CTA SECTION
+===================================== */
+.cta {
+  text-align: center;
+  padding: 3.5rem 2rem;
+  background: var(--primary);
+  color: #fff;
+  border-radius: 14px;
+  width: 90%;
+  margin: 0 auto 3rem;
+}
+
+.cta-btn {
+  margin-top: 1rem;
+}
+
+
+/* ====================================
+   FOOTER
+===================================== */
+footer {
+  text-align: center;
+  padding: 1.5rem;
+  color: var(--text-light);
+}
+
+
+
+/* ====================================
+   RESPONSIVE DESIGN
+===================================== */
+@media (max-width: 900px) {
+
+  .hero {
+    flex-direction: column-reverse;
+    height: auto;
+    padding: 2rem 1rem;
+    text-align: center;
+  }
+
+  .hero-content {
+    position: static;
+    width: 100%;
+    padding-left: 0;
+    transform: none;
+    margin-top: 2rem;
+  }
+
+  .hero-title {
+    font-size: 2.4rem;
+    max-width: 100%;
+  }
+
+  .hero-subtitle {
+    font-size: 1.1rem;
+    max-width: 100%;
+  }
+
+  .hero-image-wrapper {
+    width: 100%;
+    height: auto;
+    position: static;
+  }
+
+  .hero-image {
+    height: auto;
+  }
+
+  .hero-image-fade {
+    display: none;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .preview-image {
+    width: 90%;
+  }
+
+  .preview-text {
+    top: 18%;
+  }
+
+    .preview-text h2 {
+      font-size: 1.8rem;
+    }
+
+    .preview-text p {
+      font-size: 0.95rem;
+    }
+}
