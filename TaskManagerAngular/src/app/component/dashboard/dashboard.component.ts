@@ -31,7 +31,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     const token = this.userService.getToken();
     this.userName = this.userService.getUserName();
     if (!token) {
-      this.router.navigate(['/login']);
+      this.router.navigate(['']);
     }
   }
 

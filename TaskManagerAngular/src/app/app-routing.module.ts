@@ -11,7 +11,10 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'dashboard', component: DashboardComponent },
-  { path: 'adminDashboard', component: AdminDashboardComponent } 
+  { path: 'adminDashboard', component: AdminDashboardComponent },
+
+  { path: '**', component: LandingPageComponent }, 
+
 ];
 
 @NgModule({

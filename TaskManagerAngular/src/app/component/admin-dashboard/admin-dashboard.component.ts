@@ -71,7 +71,7 @@ export class AdminDashboardComponent implements OnInit {
   ngOnInit(): void {
     const token = this.userService.getToken();
     if (!token) {
-      this.router.navigate(['/login']);
+      this.router.navigate(['']);
       return;
     }
 

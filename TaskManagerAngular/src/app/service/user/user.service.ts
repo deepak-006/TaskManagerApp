@@ -11,8 +11,8 @@ import { Observable } from 'rxjs';
 export class UserService {
 
   //private baseUrl = 'https://localhost:7165/api';
-  //private baseUrl = 'https://localhost:44390/api';
-  private baseUrl = 'http://10.59.221.74:8090/api';
+  private baseUrl = 'https://localhost:44390/api';
+  //private baseUrl = 'http://localhost:8090/api'; 
   
 
   constructor(private http: HttpClient) { }
@@ -31,9 +31,10 @@ export class UserService {
     );
   }
 
-  storeToken(token: string, name: string): void {
+  storeToken(token: string, name: string, role: string): void {
     sessionStorage.setItem('token', token);
     sessionStorage.setItem('name', name);
+    sessionStorage.setItem('role', role);
   }
 
   getToken(): string | null {
@@ -44,8 +45,20 @@ export class UserService {
     return sessionStorage.getItem('name');
   }
 
+  getRole(): string | null {
+    return sessionStorage.getItem('role');
+  }
+
   logout(): void {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('name');
+    sessionStorage.removeItem('role');
   }
 }
+
+
+
+
+
+
+

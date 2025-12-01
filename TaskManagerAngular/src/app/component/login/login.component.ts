@@ -17,10 +17,17 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     const token = this.userService.getToken();
-    if (token) {
-      this.router.navigate(['/dashboard']);
+    const role = this.userService.getRole();
+
+    if (token && role) {
+      if (role === 'Admin') {
+        this.router.navigate(['/adminDashboard']);
+      } else if (role === 'User') {
+        this.router.navigate(['/dashboard']);
+      }
     }
   }
+
 
   onLogin() {
     const loginData: login = {
@@ -32,7 +39,7 @@ export class LoginComponent implements OnInit {
       next: (res) => {
         this.message = 'Login successful!';
         console.log('Token:', res.token + '\nRole:', res.role);
-        this.userService.storeToken(res.token, res.name);
+        this.userService.storeToken(res.token, res.name, res.role);
         if (res.role === 'Admin') {
           this.router.navigate(['/adminDashboard']);
         } else if (res.role === 'User') {
