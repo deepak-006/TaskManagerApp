@@ -1,4 +1,6 @@
-/* You can add global styles to this file, and also import other style files */
+/* =============================
+   LIGHT MODE (DEFAULT)
+============================= */
 :root {
   --primary: #0d6efd;
   --primary-hover: #0b5ed7;
@@ -21,11 +23,215 @@
   --info-light: #e8f7ff;
 }
 
-html, body {
+/* =============================
+   DARK MODE CSS VARIABLES
+============================= */
+.dark-mode {
+  --primary: #66aaff;
+  --primary-hover: #5598e6;
+  --primary-light: #1b2738;
+  --bg-body: #121212;
+  --bg-card: #1e1e1e;
+  --bg-table-header: #242424;
+  --border: #2c2c2c;
+  --border-dark: #3a3a3a;
+  --text-dark: #ffffff;
+  --text-medium: #dcdcdc;
+  --text-light: #b3b3b3;
+  --success: #22c55e;
+  --success-light: #143a26;
+  --warning: #fbbf24;
+  --warning-light: #473a19;
+  --danger: #ef4444;
+  --danger-light: #4a1f1f;
+  --info: #38bdf8;
+  --info-light: #1a2d38;
+}
+
+/* =============================
+   GLOBAL PAGE BACKGROUND
+============================= */
+html,
+body {
   margin: 0 !important;
   padding: 0 !important;
   height: 100% !important;
   width: 100% !important;
   overflow-x: hidden !important;
+  background: var(--bg-body) !important;
+  color: var(--text-dark) !important;
+}
+
+/* =============================
+   DARK MODE FULL STYLE
+============================= */
+
+/* Body + main containers */
+.dark-mode body,
+.dark-mode .admin-container,
+.dark-mode .task-container,
+.dark-mode .page-content {
+  background: var(--bg-body) !important;
+  color: var(--text-dark) !important;
+}
+
+/* Cards / Panels / Modals */
+.dark-mode .card,
+.dark-mode .modal-content {
+  background: var(--bg-card) !important;
+  border-color: var(--border-dark) !important;
+  color: var(--text-dark) !important;
+}
+
+/* Tables */
+.dark-mode table,
+.dark-mode .table {
+  background: var(--bg-card) !important;
+  color: var(--text-dark) !important;
+  border-color: var(--border-dark) !important;
+}
+
+  .dark-mode table thead,
+  .dark-mode .table thead {
+    background: var(--bg-table-header) !important;
+    color: var(--text-dark) !important;
+  }
+
+  .dark-mode table th,
+  .dark-mode table td {
+    background: var(--bg-card) !important;
+    color: var(--text-medium) !important;
+    border-color: var(--border-dark) !important;
+  }
+
+  .dark-mode table tbody tr:hover {
+    background: var(--primary-light) !important;
+  }
+
+/* Inputs & Selects */
+.dark-mode .form-control,
+.dark-mode .form-select,
+.dark-mode input,
+.dark-mode textarea,
+.dark-mode select {
+  background: #262626 !important;
+  border-color: var(--border-dark) !important;
+  color: var(--text-dark) !important;
+}
+
+  .dark-mode input::placeholder,
+  .dark-mode textarea::placeholder {
+    color: #888 !important;
+  }
+
+  .dark-mode input:focus,
+  .dark-mode textarea:focus,
+  .dark-mode select:focus {
+    background: #2c2c2c !important;
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 3px rgba(102, 170, 255, 0.35) !important;
+  }
+
+/* Dropdown Options */
+.dark-mode option {
+  background: #1e1e1e !important;
+  color: #fff !important;
+}
+
+/* List Items */
+.dark-mode .list-group-item {
+  background: transparent !important;
+  border-color: var(--border-dark) !important;
+  color: var(--text-medium) !important;
+}
+
+/* Buttons */
+.dark-mode .btn {
+  border-color: var(--border-dark) !important;
+  color: var(--text-dark) !important;
+}
+
+.dark-mode .btn-primary {
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
+  color: #fff !important;
+}
+
+.dark-mode .btn-danger {
+  background: #e74c3c !important;
+  border-color: #e74c3c !important;
+}
+
+/* Navbar */
+.dark-mode nav,
+.dark-mode .navbar,
+.dark-mode .main-navbar {
+  background: #1f1f1f !important;
+  color: #fff !important;
+  border-bottom: 1px solid var(--border-dark) !important;
+  backdrop-filter: none !important;
+}
+
+/* Priority / Role / Status badges */
+.dark-mode .role-badge,
+.dark-mode .status-badge {
+  border-color: var(--border-dark) !important;
+}
+
+/* Special UI for badges (retain original colors) */
+.dark-mode .priority-badge.low {
+  background: var(--info-light) !important;
+  color: var(--info) !important;
+}
+
+.dark-mode .priority-badge.medium {
+  background: var(--warning-light) !important;
+  color: var(--warning) !important;
+}
+
+.dark-mode .priority-badge.high {
+  background: var(--danger-light) !important;
+  color: var(--danger) !important;
+}
+
+/* Make the whole app stretch full height */
+html, body {
+  height: 100%;
+}
+
+/* app root must fill the full height */
+app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* main content must take remaining height */
+.page-content {
+  flex: 1;
+  min-height: 100vh;
+  background: var(--bg-body) !important; /* important for dark mode */
+}
+
+/* for pages with container layouts */
+.admin-container,
+.task-container,
+.profile-container {
+  min-height: calc(100vh - 80px); /* navbar height approx */
+  background: var(--bg-body) !important;
+}
+
+/* FIX NAVBAR BEING INVISIBLE IN DARK MODE */
+.dark-mode .main-navbar,
+.dark-mode .main-navbar * {
+  background: #1f1f1f !important;
+  color: #ffffff !important;
+  fill: #ffffff !important;
+}
+
+/* Fix description text inside task cards for dark mode */
+.dark-mode .task-card .task-desc {
+  color: var(--text-medium) !important;
+  background: transparent !important;
 }
 

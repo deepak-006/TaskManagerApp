@@ -1,0 +1,39 @@
+<div class="task-container container mt-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="mb-0">Deleted Tasks</h2>
+      <h5 class="welcome-text">Trash Bin</h5>
+    </div>
+
+    <button class="btn btn-outline-secondary" (click)="goBack()">
+      <i class="bi bi-arrow-left"></i> Back
+    </button>
+  </div>
+
+  <!-- Message -->
+  <div *ngIf="message" class="alert custom-alert">{{ message }}</div>
+
+  <!-- Deleted Tasks Grid -->
+  <div *ngIf="deletedTasks.length > 0; else noDeleted" class="task-grid">
+    <div *ngFor="let task of deletedTasks" class="task-card shadow-sm">
+
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="task-title">{{ task.title }}</h5>
+      </div>
+
+      <p class="task-desc text-muted">{{ task.description }}</p>
+
+      <div class="task-meta">
+        <div><strong>Due Date:</strong> {{ task.dueDate | date:'mediumDate' }}</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <ng-template #noDeleted>
+    <p class="text-muted text-center mt-5">No deleted tasks found.</p>
+  </ng-template>
+
+</div>

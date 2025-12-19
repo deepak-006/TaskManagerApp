@@ -1,0 +1,145 @@
+.calendar-container {
+  padding: 20px;
+  background: var(--bg-body);
+  min-height: calc(100vh - 80px);
+  /* NEW → center the calendar and set max width */
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Header */
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding: 0 10px;
+}
+
+/* Week row */
+.week-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding: 10px 0;
+  color: var(--text-dark);
+  font-weight: 600;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Calendar grid */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Day boxes */
+.day-cell {
+  min-height: 90px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 8px;
+  transition: 0.15s ease;
+}
+
+  .day-cell:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  }
+
+  /* 🔥 EMPTY CELLS → CLEAN AND INVISIBLE */
+  .day-cell.empty {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    pointer-events: none; /* no hover */
+    transform: none !important;
+    min-height: 90px;
+  }
+
+    .day-cell.empty:hover {
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+/* Day number */
+.day-number {
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+/* Status dots */
+.dots {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-top: 5px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+  .dot.pending {
+    background: #ef5350;
+  }
+
+  .dot.inprogress {
+    background: #29b6f6;
+  }
+
+  .dot.completed {
+    background: #66bb6a;
+  }
+
+/* NAV BUTTONS */
+.nav-btn {
+  background: var(--primary);
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+  .nav-btn:hover {
+    background: var(--primary-hover);
+  }
+
+/* ============================
+   LEGEND BOX
+============================ */
+.legend {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 15px;
+  padding-left: 5px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  color: var(--text-dark);
+  gap: 6px;
+}
+
+  .legend-item .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+/* Responsive — stack legend on small screens */
+@media (max-width: 600px) {
+  .legend {
+    flex-direction: column;
+    gap: 8px;
+  }
+}

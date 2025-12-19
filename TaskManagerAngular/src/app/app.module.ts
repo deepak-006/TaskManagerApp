@@ -13,6 +13,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './component/Authorization/token.interceptor';
 import { AdminDashboardComponent } from './component/admin-dashboard/admin-dashboard.component';
+import { DeletedComponent } from './component/deleted/deleted.component';
+import { NavbarComponent } from './component/shared/navbar/navbar.component';
+import { ProfileComponent } from './component/profile/profile.component';
+import { AnalyticsComponent } from './component/analytics/analytics.component';
+import { NgChartsModule } from 'ng2-charts';
+import { CalendarComponent } from './component/calendar/calendar.component';
+import { TaskCardComponent } from './component/shared/task-card/task-card.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { KanbanComponent } from './component/kanban/kanban.component';
 
 @NgModule({
   declarations: [
@@ -21,13 +30,23 @@ import { AdminDashboardComponent } from './component/admin-dashboard/admin-dashb
     SignupComponent,
     DashboardComponent,
     LandingPageComponent,
-    AdminDashboardComponent
+    AdminDashboardComponent,
+    DeletedComponent,
+    NavbarComponent,
+    ProfileComponent,
+    AnalyticsComponent,
+    CalendarComponent,
+    TaskCardComponent,
+    KanbanComponent,
+    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgChartsModule,
+    DragDropModule
   ],
   providers: [
     {

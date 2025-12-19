@@ -1,0 +1,87 @@
+/* ===============================
+   KANBAN LAYOUT
+=============================== */
+.kanban-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  padding: 20px;
+  min-height: calc(100vh - 80px);
+  background: var(--bg-body);
+}
+
+/* ===============================
+   COLUMNS
+=============================== */
+.kanban-column {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  min-height: 70vh;
+  transition: 0.2s ease;
+}
+
+  .kanban-column h3 {
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: 600;
+    color: var(--text-dark);
+  }
+
+  /* Highlight column on drag over */
+  .kanban-column.cdk-drop-list-dragging {
+    background: var(--primary-light);
+    border-color: var(--primary);
+  }
+
+  /* Smooth transition after drop */
+  .kanban-column.cdk-drop-list-receiving {
+    box-shadow: 0 0 10px rgba(13, 110, 253, 0.3);
+  }
+
+/* ===============================
+   DRAGGABLE TASK CARDS
+=============================== */
+[cdkDrag] {
+  cursor: grab;
+  margin-bottom: 14px;
+  transition: transform 0.15s ease;
+}
+
+  [cdkDrag]:active {
+    cursor: grabbing;
+    transform: scale(1.02);
+  }
+
+/* Ghost preview while dragging */
+.cdk-drag-preview {
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+}
+
+/* Placeholder space */
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+/* Faster, cleaner animation when dropping */
+.cdk-drag-animating {
+  transition: transform 250ms ease;
+}
+
+/* ===============================
+   DARK MODE FIXES
+=============================== */
+.dark-mode .kanban-column {
+  background: var(--bg-card);
+  border-color: var(--border-dark);
+}
+
+  .dark-mode .kanban-column.cdk-drop-list-dragging {
+    background: #1c2733;
+  }
+
+  .dark-mode .kanban-column h3 {
+    color: var(--text-dark);
+  }

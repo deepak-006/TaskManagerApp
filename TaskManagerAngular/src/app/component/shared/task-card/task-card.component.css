@@ -1,0 +1,133 @@
+/* -----------------------------------------
+   TASK CARD (Light Mode + Base Style)
+------------------------------------------*/
+.task-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  transition: 0.2s ease;
+  height: 100%;
+  min-height: 260px;
+}
+
+  .task-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  }
+
+/* Title */
+.task-title {
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+/* Description */
+.task-desc {
+  flex-grow: 1;
+  color: var(--text-medium);
+  margin: 6px 0 10px;
+  font-size: 0.95rem;
+  /* clamp to avoid huge descriptions */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Meta section pinned at bottom */
+.task-meta {
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  font-size: 0.85rem;
+  color: var(--text-light);
+}
+
+/* Actions */
+.task-actions {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* -----------------------------------------
+   Priority Badges (Light Mode)
+------------------------------------------*/
+.priority-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+  text-transform: capitalize;
+}
+
+  .priority-badge.low {
+    background: var(--info-light);
+    color: var(--info);
+    border-color: var(--info);
+  }
+
+  .priority-badge.medium {
+    background: var(--warning-light);
+    color: var(--warning);
+    border-color: var(--warning);
+  }
+
+  .priority-badge.high {
+    background: var(--danger-light);
+    color: var(--danger);
+    border-color: var(--danger);
+  }
+
+/* ============================================================
+   💀 DARK MODE FIX (Overrides your nuclear dark-mode rule)
+   (Guaranteed to work even with .dark-mode * { ... !important })
+==============================================================*/
+
+/* Card background */
+.dark-mode .task-card {
+  background: #1e1e1e !important;
+  border-color: #333 !important;
+}
+
+  /* Title color */
+  .dark-mode .task-card .task-title {
+    color: #ffffff !important;
+  }
+
+  /* Description color (THIS fixes invisibility) */
+  .dark-mode .task-card .task-desc {
+    color: #e5e5e5 !important;
+    -webkit-text-fill-color: #e5e5e5 !important; /* Safari fix */
+  }
+
+  /* Meta color */
+  .dark-mode .task-card .task-meta {
+    color: #c9c9c9 !important;
+    border-color: #444 !important;
+  }
+
+/* Priority badges in dark mode */
+.dark-mode .priority-badge.low {
+  background: rgba(66,165,245,0.25) !important;
+  color: #42a5f5 !important;
+  border-color: #42a5f5 !important;
+}
+
+.dark-mode .priority-badge.medium {
+  background: rgba(255,202,40,0.25) !important;
+  color: #ffca28 !important;
+  border-color: #ffca28 !important;
+}
+
+.dark-mode .priority-badge.high {
+  background: rgba(239,83,80,0.25) !important;
+  color: #ef5350 !important;
+  border-color: #ef5350 !important;
+}
+

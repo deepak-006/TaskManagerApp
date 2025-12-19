@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../service/user/user.service';
 import { userSignup } from '../../model/signup';
 import { Router } from '@angular/router';
@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css']
 })
-export class SignupComponent {
+export class SignupComponent implements OnInit {
   firstName: string = '';
   lastName: string = '';
   dateOfBirth: string = '';
@@ -18,6 +18,19 @@ export class SignupComponent {
   message: string = '';
 
   constructor(private userService: UserService, private router: Router) { }
+
+  ngOnInit() {
+    const token = this.userService.getToken();
+    const role = this.userService.getRole();
+
+    if (token && role) {
+      if (role === 'Admin') {
+        this.router.navigate(['/adminDashboard']);
+      } else if (role === 'User') {
+        this.router.navigate(['/dashboard']);
+      }
+    }
+  }
 
   onSignup() {
     const role = this.isAdmin ? 'Admin' : 'User'; // assign role based on checkbox

@@ -18,6 +18,10 @@ export class TaskService {
     return this.http.get<Task[]>(`${this.baseUrl}/Task/GetTasks`);
   }
 
+  getDeletedTasks(): Observable<Task[]> {
+    return this.http.get<Task[]>(`${this.baseUrl}/Task/GetDeletedTasks`);
+  }
+
   deleteTask(id: number): Observable<{ success: boolean; message: string }> {
     return this.http.delete<{ success: boolean; message: string }>(
       `${this.baseUrl}/Task/DeleteTask?taskId=${id}`
@@ -31,4 +35,6 @@ export class TaskService {
   updateTask(task: Task): Observable<Task> {
     return this.http.patch<Task>(`${this.baseUrl}/Task/UpdateTask`, task);
   }
+
+
 }

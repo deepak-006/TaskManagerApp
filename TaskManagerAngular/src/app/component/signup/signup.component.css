@@ -1,25 +1,54 @@
-/* Container */
+/* ============================================================
+   SIGNUP PAGE — MODERN CLEAN LOOK (LIGHT + DARK MODE SUPPORT)
+   Uses host-context(.dark-mode) for Angular dark mode.
+============================================================ */
+
+/* ------------------------------
+   PAGE BACKGROUND
+------------------------------ */
 .signup-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+  min-height: 100vh;
   padding: 1rem;
+  background: linear-gradient(135deg, #eceff4, #f7f8fa);
+  transition: background 0.35s ease;
 }
 
-/* Card */
+/* DARK MODE BACKGROUND */
+:host-context(.dark-mode) .signup-container {
+  background: linear-gradient(135deg, #141416, #0f0f11) !important;
+}
+
+
+/* ------------------------------
+   SIGNUP CARD (GLASS EFFECT)
+------------------------------ */
 .signup-card {
   width: 420px;
-  background: var(--bg-card);
   padding: 2rem;
-  border-radius: 14px;
-  border: 1px solid var(--border);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  border-radius: 18px;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
   text-align: center;
+  transition: 0.35s ease;
 }
 
-/* Title */
+/* DARK MODE GLASS CARD */
+:host-context(.dark-mode) .signup-card {
+  background: rgba(30,30,30,0.55);
+  border-color: rgba(255,255,255,0.08);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+
+
+/* ------------------------------
+   TITLES
+------------------------------ */
 .signup-title {
   font-size: 1.8rem;
   font-weight: 700;
@@ -33,7 +62,19 @@
   margin-bottom: 1.5rem;
 }
 
-/* 2 Column Form */
+/* DARK MODE TEXT FIXES */
+:host-context(.dark-mode) .signup-title {
+  color: #ffffff;
+}
+
+:host-context(.dark-mode) .signup-subtitle {
+  color: #d0d0d0;
+}
+
+
+/* ------------------------------
+   FORM ROWS (2 columns)
+------------------------------ */
 .row {
   display: flex;
   gap: 12px;
@@ -43,7 +84,10 @@
   flex: 1;
 }
 
-/* Form Fields */
+
+/* ------------------------------
+   INPUT FIELDS
+------------------------------ */
 .form-group {
   margin-bottom: 1rem;
   text-align: left;
@@ -56,48 +100,84 @@
     display: block;
   }
 
-  .form-group input {
-    width: 100%;
-    padding: 0.55rem 0.8rem;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: #fafafa;
-    transition: all 0.2s ease;
-  }
+:host-context(.dark-mode) .form-group label {
+  color: #d6d6d6;
+}
 
-    .form-group input:focus {
-      border-color: var(--primary);
-      background: #fff;
-      box-shadow: 0 0 5px rgba(13, 110, 253, 0.25);
-    }
+.form-group input {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  transition: all 0.25s ease;
+  font-size: 0.95rem;
+}
 
-/* Checkbox */
+/* LIGHT MODE INPUTS */
+.form-group input {
+  background: #fafafa;
+}
+
+/* DARK MODE INPUTS */
+:host-context(.dark-mode) .form-group input {
+  background: #1e1e1e !important;
+  border-color: #3a3a3a !important;
+  color: #ffffff;
+}
+
+.form-group input:focus {
+  border-color: var(--primary);
+  background: #fff;
+  box-shadow: 0 0 5px rgba(13,110,253,0.25);
+}
+
+:host-context(.dark-mode) .form-group input:focus {
+  background: #262626 !important;
+  box-shadow: 0 0 6px rgba(90,140,255,0.35);
+}
+
+
+/* ------------------------------
+   ADMIN CHECKBOX
+------------------------------ */
 .role-checkbox {
   display: flex;
   align-items: center;
   gap: 8px;
   color: var(--text-dark);
-  font-size: 0.95rem;
   margin-top: 5px;
 }
 
-  .role-checkbox input {
-    width: 18px;
-    height: 18px;
-    accent-color: var(--primary);
+  .role-checkbox span {
+    font-size: 0.95rem;
   }
 
-/* Button */
+:host-context(.dark-mode) .role-checkbox span {
+  color: #e6e6e6;
+}
+
+.role-checkbox input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary);
+}
+
+
+/* ------------------------------
+   SIGNUP BUTTON
+------------------------------ */
 .signup-btn {
   width: 100%;
-  padding: 0.7rem;
+  padding: 0.8rem;
   background: var(--primary);
   color: white;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   font-weight: 600;
   margin-top: 10px;
-  transition: 0.2s;
+  transition: 0.25s ease;
+  font-size: 1rem;
 }
 
   .signup-btn:hover {
@@ -105,7 +185,10 @@
     transform: translateY(-2px);
   }
 
-/* Login Redirect */
+
+/* ------------------------------
+   LOGIN REDIRECT
+------------------------------ */
 .login-redirect {
   margin-top: 1rem;
   font-size: 0.95rem;
@@ -122,7 +205,15 @@
       text-decoration: underline;
     }
 
-/* Message */
+/* DARK MODE LOGIN TEXT */
+:host-context(.dark-mode) .login-redirect {
+  color: #bdbdbd;
+}
+
+
+/* ------------------------------
+   MESSAGE BOX
+------------------------------ */
 .signup-message {
   margin-top: 1rem;
   color: var(--success);
@@ -133,7 +224,6 @@
   animation: fadeIn 0.4s ease;
 }
 
-/* Fade Animation */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -144,10 +234,14 @@
   }
 }
 
-/* Mobile */
+
+/* ------------------------------
+   RESPONSIVE
+------------------------------ */
 @media (max-width: 450px) {
   .signup-card {
     width: 100%;
+    padding: 1.6rem;
   }
 
   .row {

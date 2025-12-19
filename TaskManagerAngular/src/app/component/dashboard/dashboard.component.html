@@ -1,66 +1,78 @@
-<div class="task-container container mt-4">
+<div class="dashboard-container">
 
-  <!-- Header -->
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-      <h2 class="mb-0">Task Dashboard</h2>
-      <h5 class="welcome-text">Welcome, {{ userName }}</h5>
-    </div>
+  <!-- SEARCH BAR -->
+  <div class="search-container">
+    <div class="search-wrapper">
+      <i class="bi bi-search"></i>
 
-    <button class="btn btn-outline-secondary" (click)="logout()">
-      <i class="bi bi-box-arrow-right"></i> Logout
-    </button>
-  </div>
+      <input type="text"
+             class="search-input"
+             placeholder="Search tasks..."
+             [(ngModel)]="searchText"
+             (input)="filterTasks()">
 
-  <!-- Feedback Message -->
-  <div *ngIf="message" class="alert custom-alert">{{ message }}</div>
-  <div *ngIf="tasks.length > 0; else noTasks" class="task-grid">
-    <div *ngFor="let task of tasks" class="task-card shadow-sm">
-
-      <!-- TITLE & PRIORITY -->
-      <div class="d-flex justify-content-between align-items-center mb-2">
-        <h5 class="task-title">{{ task.title }}</h5>
-        <span class="priority-badge" [ngClass]="task.priority.toLowerCase()">
-          {{ task.priority }}
-        </span>
-      </div>
-
-      <!-- DESCRIPTION -->
-      <p class="task-desc text-muted">{{ task.description }}</p>
-
-      <!-- META -->
-      <div class="task-meta">
-        <div><strong>Status:</strong> {{ task.status }}</div>
-        <div><strong>Due:</strong> {{ task.dueDate | date:'mediumDate' }}</div>
-        <div><strong>Created:</strong> {{ task.createdAt | date:'mediumDate' }}</div>
-      </div>
-
-      <!-- ACTIONS -->
-      <div class="task-actions">
-        <button class="btn btn-sm btn-outline-warning" (click)="editTask(task)">
-          <i class="bi bi-pencil-fill"></i> Edit
-        </button>
-
-        <button class="btn btn-sm btn-outline-danger" (click)="deleteTask(task.taskId)">
-          <i class="bi bi-trash-fill"></i> Delete
-        </button>
-      </div>
-
+      <!-- CLEAR BUTTON -->
+      <button *ngIf="searchText" class="clear-btn" (click)="clearSearch()">✕</button>
     </div>
   </div>
 
 
-  <ng-template #noTasks>
-    <p class="text-muted text-center mt-5">No tasks found.</p>
-  </ng-template>
+ 
+  <!-- TASK GRID -->
+  <!-- If search is empty → Show quick links only -->
+  <div *ngIf="!searchText || searchText.trim().length === 0" class="quick-links">
+    <div class="quick-link" (click)="goToBoard()">
+      <img src="assets/board.png" alt="Board">
+      <span>Board</span>
+    </div>
+
+    <div class="quick-link" (click)="goToCalendar()">
+      <img src="assets/calendar.png" alt="Calendar">
+      <span>Calendar</span>
+    </div>
+
+    <div class="quick-link" (click)="goToAnalytics()">
+      <img src="assets/analytics.png" alt="Analytics">
+      <span>Analytics</span>
+    </div>
+
+    <div class="quick-link" (click)="goToRecycleBin()">
+      <img src="assets/bin.png" alt="Recycle Bin">
+      <span>Recycle Bin</span>
+    </div>
+
+    <div class="quick-link" (click)="openAddTaskModal()">
+      <img src="assets/add.png" alt="Add Task">
+      <span>New Task</span>
+    </div>
+  </div>
+
+
+  <!-- If search has text → Show filtered tasks -->
+  <div *ngIf="searchText && searchText.trim().length > 0">
+
+    <!-- No tasks found -->
+    <div *ngIf="filteredTasks.length === 0" class="text-center mt-5 text-muted">
+      No matching tasks.
+    </div>
+
+    <!-- Tasks Grid -->
+    <div *ngIf="filteredTasks.length > 0" class="task-grid">
+      <app-task-card *ngFor="let task of filteredTasks"
+                     [task]="task"
+                     (edit)="openEditModal($event)"
+                     (delete)="deleteTask($event)">
+      </app-task-card>
+    </div>
+
+  </div>
+
+
 </div>
 
-<!-- Floating Add Button -->
-<button class="btn btn-primary fab" (click)="openAddTaskModal()">
-  <i class="bi bi-plus-lg"></i>
-</button>
 
-<!-- ADD Task Modal -->
+
+<!-- ADD TASK MODAL -->
 <div class="modal fade" #addTaskModal tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -75,7 +87,7 @@
 
           <div class="mb-3">
             <label class="form-label">Title</label>
-            <input class="form-control" [(ngModel)]="newTask.title" name="title" required>
+            <input class="form-control" [(ngModel)]="newTask.title" name="title" required />
           </div>
 
           <div class="mb-3">
@@ -103,7 +115,7 @@
 
           <div class="mb-3">
             <label class="form-label">Due Date</label>
-            <input type="date" class="form-control" [(ngModel)]="newTask.dueDate" name="dueDate">
+            <input type="date" class="form-control" [(ngModel)]="newTask.dueDate" name="dueDate" />
           </div>
 
           <button class="btn btn-primary w-100" type="submit">Add Task</button>
@@ -115,7 +127,8 @@
   </div>
 </div>
 
-<!-- EDIT Task Modal -->
+
+<!-- EDIT TASK MODAL -->
 <div class="modal fade" #editTaskModal tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -126,12 +139,11 @@
       </div>
 
       <div class="modal-body">
-
         <form (ngSubmit)="updateTask()">
 
           <div class="mb-3">
             <label class="form-label">Title</label>
-            <input class="form-control" [(ngModel)]="editTaskData.title" name="title" required>
+            <input class="form-control" [(ngModel)]="editTaskData.title" name="title" required />
           </div>
 
           <div class="mb-3">
@@ -159,7 +171,7 @@
 
           <div class="mb-3">
             <label class="form-label">Due Date</label>
-            <input type="date" class="form-control" [(ngModel)]="editTaskData.dueDate" name="dueDate">
+            <input type="date" class="form-control" [(ngModel)]="editTaskData.dueDate" name="dueDate" />
           </div>
 
           <button class="btn btn-primary w-100" type="submit">Update Task</button>

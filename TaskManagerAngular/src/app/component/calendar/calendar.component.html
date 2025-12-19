@@ -1,0 +1,55 @@
+<div class="calendar-container">
+
+  <div class="calendar-header">
+    <button class="nav-btn" (click)="goToPrevMonth()">
+      <i class="bi bi-chevron-left"></i>
+    </button>
+
+    <h3>{{ monthName }} {{ currentYear }}</h3>
+
+    <button class="nav-btn" (click)="goToNextMonth()">
+      <i class="bi bi-chevron-right"></i>
+    </button>
+  </div>
+
+  <!-- ⭐ LEGEND SECTION -->
+  <div class="legend">
+    <div class="legend-item">
+      <span class="dot pending"></span> Pending
+    </div>
+    <div class="legend-item">
+      <span class="dot inprogress"></span> In Progress
+    </div>
+    <div class="legend-item">
+      <span class="dot completed"></span> Completed
+    </div>
+  </div>
+
+  <div class="week-row">
+    <div class="week-day" *ngFor="let w of weekDays">{{ w }}</div>
+  </div>
+
+  <div class="calendar-grid">
+
+    <div class="day-cell"
+         *ngFor="let d of calendarDays"
+         [class.empty]="d.empty">
+
+      <!-- Only show day number if NOT empty -->
+      <div class="day-number" *ngIf="!d.empty">
+        {{ d.day }}
+      </div>
+
+      <!-- Only show dots if tasks exist and NOT empty -->
+      <div class="dots" *ngIf="!d.empty && d.tasks.length > 0">
+        <span *ngFor="let task of d.tasks"
+              class="dot"
+              [ngClass]="task.status.replace(' ', '').toLowerCase()">
+        </span>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

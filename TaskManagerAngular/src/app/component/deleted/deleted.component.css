@@ -1,0 +1,103 @@
+/* ------------------------------
+   PAGE CONTAINER
+------------------------------ */
+.task-container {
+  background: var(--bg-body);
+  padding-bottom: 40px;
+}
+
+/* ------------------------------
+   HEADINGS & UI TEXT
+------------------------------ */
+h2 {
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.welcome-text {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+/* Alert (message) */
+.custom-alert {
+  border-radius: 10px;
+  background: var(--warning-light);
+  color: var(--warning);
+  border: 1px solid var(--warning);
+  font-weight: 500;
+}
+
+/* ------------------------------
+   GRID LAYOUT – 3 CARDS PER ROW
+------------------------------ */
+.task-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  margin-top: 20px;
+}
+
+/* Tablet */
+@media (max-width: 992px) {
+  .task-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+  .task-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* ------------------------------
+   DELETED TASK CARD (RED THEME)
+------------------------------ */
+.task-card {
+  background: rgba(255, 230, 230, 0.6); /* soft red tint */
+  border: 1px solid rgba(255, 100, 100, 0.6);
+  border-radius: 14px;
+  padding: 18px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 230px;
+}
+
+  .task-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(255, 100, 100, 0.25);
+  }
+
+/* ------------------------------
+   TEXT STYLES
+------------------------------ */
+.task-title {
+  font-weight: 600;
+  color: #b30000; /* deeper red */
+  margin-bottom: 6px;
+}
+
+.task-desc {
+  color: #aa3f3f; /* soft red */
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+}
+
+/* ------------------------------
+   META INFO (DATES)
+------------------------------ */
+.task-meta {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 120, 120, 0.6);
+  font-size: 0.85rem;
+  color: #cc4a4a;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}

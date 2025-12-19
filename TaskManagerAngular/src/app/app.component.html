@@ -1,1 +1,16 @@
-<router-outlet></router-outlet>
+<!-- Public pages (landing, login, signup) -->
+<div *ngIf="!showNavbar">
+  <router-outlet></router-outlet>
+</div>
+
+<!-- Authenticated pages only -->
+
+
+<div *ngIf="showNavbar">
+  <app-navbar></app-navbar>
+
+  <div class="page-content">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+

@@ -31,6 +31,18 @@ export class UserService {
     );
   }
 
+  getProfile(): Observable<userSignup> {
+    return this.http.get<userSignup>(
+      `${this.baseUrl}/User/GetCurrentUser`
+    );
+  }
+
+  updateProfile(profile :userSignup): Observable<any> {
+    return this.http.patch<any>(
+      `${this.baseUrl}/User/UpdateProfile`, profile
+    );
+  }
+
   storeToken(token: string, name: string, role: string): void {
     sessionStorage.setItem('token', token);
     sessionStorage.setItem('name', name);

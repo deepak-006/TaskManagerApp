@@ -1,3 +1,5 @@
+
+
 /* ====================================
    ROOT THEME COLORS
 ===================================== */
@@ -333,4 +335,29 @@ footer {
     .preview-text p {
       font-size: 0.95rem;
     }
+}
+
+/* -------------------------------
+   HERO IMAGE MODE SWITCHING
+-------------------------------- */
+
+/* Light mode (default) */
+.hero-dark {
+  display: none;
+}
+
+/* Dark mode image visible */
+:host-context(.dark-mode) .hero-light {
+  display: none !important;
+}
+
+:host-context(.dark-mode) .hero-dark {
+  display: block !important;
+}
+
+/* DARK MODE FIX → Make fade dark instead of bright */
+:host-context(.dark-mode) .hero-image-fade {
+  background: linear-gradient( to right, #121212 0%, /* Dark background */
+  rgba(18, 18, 18, 0.8) 40%, /* Smooth dark fade */
+  rgba(18, 18, 18, 0) 100% ) !important;
 }

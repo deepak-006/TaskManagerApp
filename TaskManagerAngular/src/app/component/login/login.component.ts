@@ -41,10 +41,11 @@ export class LoginComponent implements OnInit {
         console.log('Token:', res.token + '\nRole:', res.role);
         this.userService.storeToken(res.token, res.name, res.role);
         if (res.role === 'Admin') {
-          this.router.navigate(['/adminDashboard']);
-        } else if (res.role === 'User') {
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/adminDashboard'], { replaceUrl: true });
+        } else {
+          this.router.navigate(['/dashboard'], { replaceUrl: true });
         }
+
         
       },
       error: () => {

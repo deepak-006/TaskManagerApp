@@ -1,37 +1,59 @@
-/* ------------------------------------
-   Login Background Wrapper
------------------------------------- */
+/* ============================================================
+   LOGIN PAGE — MODERN CLEAN LOOK (LIGHT + DARK MODE SUPPORT)
+============================================================ */
+
+/* ------------------------------
+   PAGE BACKGROUND
+------------------------------ */
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background: linear-gradient( 135deg, var(--primary) 0%, #4c8dff 50%, var(--primary-hover) 100% );
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  padding: 1rem;
+  background: linear-gradient(135deg, #eceff4, #f7f8fa);
+  transition: background 0.35s ease;
 }
 
-/* ------------------------------------
-   Login Card
------------------------------------- */
+/* DARK MODE BACKGROUND */
+:host-context(.dark-mode) .login-container {
+  background: linear-gradient(135deg, #141416, #0f0f11) !important;
+}
+
+
+/* ------------------------------
+   LOGIN CARD — GLASS EFFECT
+------------------------------ */
 .login-card {
-  background: var(--bg-card);
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   padding: 2.5rem;
   width: 380px;
-  border-radius: 14px;
-  border: 1px solid var(--border);
-  box-shadow: 0 8px 22px rgba(0,0,0,0.12);
+  border-radius: 18px;
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
   text-align: center;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: 0.3s ease;
 }
 
-  .login-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 26px rgba(0,0,0,0.16);
-  }
+/* DARK MODE GLASS CARD */
+:host-context(.dark-mode) .login-card {
+  background: rgba(30,30,30,0.55);
+  border-color: rgba(255,255,255,0.08);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
 
-/* ------------------------------------
-   Titles
------------------------------------- */
+/* Hover Effect */
+.login-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.2);
+}
+
+
+/* ------------------------------
+   TITLES
+------------------------------ */
 .login-title {
   font-size: 1.9rem;
   color: var(--text-dark);
@@ -45,9 +67,19 @@
   margin-bottom: 1.8rem;
 }
 
-/* ------------------------------------
-   Form Fields
------------------------------------- */
+/* DARK MODE TEXT FIXES */
+:host-context(.dark-mode) .login-title {
+  color: #ffffff;
+}
+
+:host-context(.dark-mode) .login-subtitle {
+  color: #d0d0d0;
+}
+
+
+/* ------------------------------
+   FORM FIELDS
+------------------------------ */
 .form-group {
   margin-bottom: 1.2rem;
   text-align: left;
@@ -57,40 +89,59 @@
     font-size: 0.95rem;
     font-weight: 600;
     color: var(--text-medium);
-    display: block;
     margin-bottom: 0.35rem;
+    display: block;
   }
 
-  .form-group input {
-    width: 100%;
-    padding: 0.65rem 0.85rem;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: #fafafa;
-    font-size: 0.95rem;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  }
+:host-context(.dark-mode) .form-group label {
+  color: #d6d6d6;
+}
 
-    .form-group input:focus {
-      border-color: var(--primary);
-      outline: none;
-      background: #fff;
-      box-shadow: 0 0 6px rgba(13, 110, 253, 0.25);
-    }
+.form-group input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #fafafa;
+  font-size: 0.95rem;
+  transition: all 0.25s ease;
+}
 
-/* ------------------------------------
-   Login Button
------------------------------------- */
+/* DARK MODE INPUT */
+:host-context(.dark-mode) .form-group input {
+  background: #1e1e1e !important;
+  border-color: #3a3a3a !important;
+  color: #fff;
+}
+
+/* Focus */
+.form-group input:focus {
+  border-color: var(--primary);
+  outline: none;
+  background: #fff;
+  box-shadow: 0 0 6px rgba(13, 110, 253, 0.25);
+}
+
+:host-context(.dark-mode) .form-group input:focus {
+  background: #262626 !important;
+  box-shadow: 0 0 6px rgba(90,140,255,0.35);
+}
+
+
+/* ------------------------------
+   LOGIN BUTTON
+------------------------------ */
 .login-btn {
   width: 100%;
-  padding: 0.7rem;
+  padding: 0.75rem;
   background: var(--primary);
-  border: none;
-  border-radius: 10px;
   color: white;
-  font-size: 1rem;
+  border: none;
+  border-radius: 12px;
   font-weight: 600;
-  transition: background 0.25s ease, transform 0.1s ease;
+  margin-top: 10px;
+  font-size: 1rem;
+  transition: 0.25s ease;
 }
 
   .login-btn:hover {
@@ -98,29 +149,36 @@
     transform: translateY(-2px);
   }
 
-/* ------------------------------------
-   Error Message
------------------------------------- */
+
+/* ------------------------------
+   ERROR / SUCCESS MESSAGE
+------------------------------ */
 .login-message {
   margin-top: 1rem;
   font-size: 0.95rem;
   color: var(--danger);
   background: var(--danger-light);
-  padding: 8px 10px;
-  border-radius: 8px;
   border: 1px solid var(--danger);
+  padding: 10px;
+  border-radius: 10px;
   font-weight: 500;
+  animation: fadeIn 0.35s ease;
 }
 
-/* Subtitle under login title */
-.login-subtitle {
-  font-size: 0.95rem;
-  color: var(--text-light);
-  margin-top: -8px;
-  margin-bottom: 1.6rem;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
-/* Signup redirect text */
+
+/* ------------------------------
+   SIGNUP REDIRECT TEXT
+------------------------------ */
 .signup-redirect {
   margin-top: 1rem;
   font-size: 0.95rem;
@@ -128,11 +186,16 @@
 }
 
   .signup-redirect a {
-    text-decoration: none;
     color: var(--primary);
     font-weight: 600;
+    text-decoration: none;
   }
 
     .signup-redirect a:hover {
       text-decoration: underline;
     }
+
+/* DARK MODE FIX */
+:host-context(.dark-mode) .signup-redirect {
+  color: #bdbdbd;
+}

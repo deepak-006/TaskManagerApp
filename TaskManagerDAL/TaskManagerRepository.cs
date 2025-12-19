@@ -16,19 +16,6 @@ namespace TaskManagerDAL
 
         public User Login(string email)
         {
-            //try
-            //{
-            //    var user = Context.Users.FirstOrDefault(u => u.Email == email);
-            //    if (user != null)
-            //    {
-            //        return user;
-            //    }
-            //    return null;
-            //}
-            //catch (Exception ex)
-            //{
-            //    return null;
-            //}
             try
             {
                 return Context.Users.FirstOrDefault(u => u.Email == email);
@@ -54,6 +41,46 @@ namespace TaskManagerDAL
                 userId = -1;
             }
             return userId;
+        }
+
+        public User GetUser(int userId)
+        {
+            User user = new User();
+            try
+            {
+                user = (from u in Context.Users
+                        where u.UserId == userId
+                        select u).FirstOrDefault();
+            }
+            catch (Exception)
+            {
+                user = null;
+            }
+            return user;
+        }
+
+        public int UpdateProfile(User user)
+        {
+            int result = 0;
+            try
+            {
+                var userFound = (from u in Context.Users
+                                 where u.UserId == user.UserId
+                                 select u).FirstOrDefault();
+                if (userFound != null)
+                {
+                    userFound.FirstName = user.FirstName;
+                    userFound.LastName = user.LastName;
+                    userFound.DateOfBirth = user.DateOfBirth;
+                    Context.SaveChanges();
+                    result = 1;
+                }
+            }
+            catch (Exception)
+            {
+                result = -1;
+            }
+            return result;
         }
 
         public Models.Task GetTaskById(int taskId)
@@ -224,6 +251,22 @@ namespace TaskManagerDAL
                          .Skip((pageNumber - 1) * pageSize)
                          .Take(pageSize)
                          .ToListAsync();
+        }
+
+        public List<Models.Task> GetRecycleBinTasks(int userId)
+        {
+            List<Models.Task> result = null;
+            try
+            {
+                result = (from t in Context.Tasks
+                          where t.IsDeleted == true && t.AssignedTo == userId
+                          select t).ToList();
+            }
+            catch (Exception)
+            {
+                result = null;
+            }
+            return result;
         }
 
         public async Task<long> GetTotalTaskCountAsync()

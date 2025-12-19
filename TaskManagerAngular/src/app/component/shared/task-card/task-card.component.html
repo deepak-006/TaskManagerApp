@@ -1,0 +1,29 @@
+<div class="task-card shadow-sm">
+
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <h5 class="task-title">{{ task.title }}</h5>
+
+    <span class="priority-badge" [ngClass]="task.priority.toLowerCase()">
+      {{ task.priority }}
+    </span>
+  </div>
+
+  <p class="task-desc text-muted">{{ task.description }}</p>
+
+  <div class="task-meta">
+    <div><strong>Status:</strong> {{ task.status }}</div>
+    <div><strong>Due:</strong> {{ task.dueDate | date:'mediumDate' }}</div>
+    <div><strong>Created:</strong> {{ task.createdAt | date:'mediumDate' }}</div>
+  </div>
+
+  <div class="task-actions">
+    <button class="btn btn-sm btn-outline-warning" (click)="onEdit()">
+      <i class="bi bi-pencil-fill"></i> Edit
+    </button>
+
+    <button class="btn btn-sm btn-outline-danger" (click)="onDelete()">
+      <i class="bi bi-trash-fill"></i> Delete
+    </button>
+  </div>
+
+</div>

@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using System.Security.Claims;
 using TaskManagerDAL;
-using Serilog;
+using TaskManagerWebServices.Models;
 
 namespace TaskManagerWebServices.Controllers
 {
@@ -164,6 +165,22 @@ namespace TaskManagerWebServices.Controllers
             catch (Exception ex)
             {
                 _logger.LogError("LogError in DeleteTask: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult GetDeletedTasks()
+        {
+            int userId = GetUserIdFromClaims();
+            try
+            {
+                var task = _repository.GetRecycleBinTasks(userId);
+                return Ok(task);
+            }
+            catch (Exception ex)
+            {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }

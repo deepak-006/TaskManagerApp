@@ -115,8 +115,8 @@ namespace TaskManagerWebServices
 
             // Configure the HTTP request pipeline.
          
-                app.UseSwagger();
-                app.UseSwaggerUI();
+            app.UseSwagger();
+            app.UseSwaggerUI();
             
 
             app.UseHttpsRedirection();

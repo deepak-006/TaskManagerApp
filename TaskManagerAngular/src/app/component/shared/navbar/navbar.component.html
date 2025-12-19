@@ -1,0 +1,47 @@
+<nav class="navbar navbar-expand-lg main-navbar">
+  <div class="container-fluid">
+
+    <!-- Brand -->
+    <a class="navbar-brand" routerLink="/dashboard">Task Manager</a>
+
+    <div class="right-controls">
+
+      <!-- THEME BUTTON -->
+      <button class="btn theme-toggle" (click)="toggleTheme()">
+        <i class="bi" [ngClass]="isDarkMode ? 'bi-sun-fill' : 'bi-moon-fill'"></i>
+      </button>
+
+      <!-- USER AVATAR -->
+      <div class="avatar-wrapper">
+        <div class="user-avatar" (click)="toggleMenu()">
+          {{ userInitials }}
+        </div>
+
+        <!-- DROPDOWN -->
+        <div class="user-menu" *ngIf="isMenuOpen">
+
+          <div class="dropdown-item" (click)="goToProfile()">
+            <i class="bi bi-person-circle me-2"></i> Profile
+          </div>
+
+          <!-- ⭐ ADMIN MODE OPTIONS -->
+          <ng-container *ngIf="isAdmin">
+            <div class="dropdown-item" (click)="goToAdmin()">
+              <i class="bi bi-shield-lock-fill me-2"></i> Admin Mode
+            </div>
+
+            <div class="dropdown-item" (click)="goToUserDashboard()">
+              <i class="bi bi-person-workspace me-2"></i> User Mode
+            </div>
+          </ng-container>
+
+          <div class="dropdown-item logout-item" (click)="confirmLogout()">
+            <i class="bi bi-box-arrow-right me-2"></i> Logout
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</nav>

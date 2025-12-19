@@ -1,0 +1,65 @@
+<div class="analytics-container">
+
+  <h2 class="mb-3">Task Analytics</h2>
+
+  <div class="chart-grid">
+
+    <!-- Status Bar Chart -->
+    <div class="chart-card small-card">
+      <h4>Status Overview</h4>
+      <canvas baseChart [data]="barChartData" [type]="'bar'"></canvas>
+    </div>
+
+    <!-- Priority Doughnut Chart -->
+    <div class="chart-card small-card small-chart">
+      <h4>Priority Distribution</h4>
+      <canvas baseChart
+              [data]="doughnutData"
+              [type]="'doughnut'">
+
+      </canvas>
+    </div>
+
+  </div>
+
+
+  <!-- ⭐ UPCOMING DEADLINES -->
+  <div class="list-section">
+    <h3>Upcoming Deadlines</h3>
+
+    <div *ngIf="upcoming.length > 0; else noUpcoming">
+      <div class="mini-card" *ngFor="let t of upcoming">
+        <div>
+          <h5>{{ t.title }}</h5>
+          <span class="date">{{ t.dueDate | date:'mediumDate' }}</span>
+        </div>
+        <span class="badge upcoming">{{ t.remainingDays }} days left</span>
+      </div>
+    </div>
+
+    <ng-template #noUpcoming>
+      <p class="text-muted">No upcoming tasks</p>
+    </ng-template>
+  </div>
+
+
+  <!-- ⭐ OVERDUE TASKS -->
+  <div class="list-section">
+    <h3>Overdue Tasks</h3>
+
+    <div *ngIf="overdue.length > 0; else noOverdue">
+      <div class="mini-card overdue-card" *ngFor="let t of overdue">
+        <div>
+          <h5>{{ t.title }}</h5>
+          <span class="date">{{ t.dueDate | date:'mediumDate' }}</span>
+        </div>
+        <span class="badge overdue">Late</span>
+      </div>
+    </div>
+
+    <ng-template #noOverdue>
+      <p class="text-muted">No overdue tasks</p>
+    </ng-template>
+  </div>
+
+</div>

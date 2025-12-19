@@ -1,0 +1,60 @@
+<div cdkDropListGroup class="kanban-container">
+
+  <!-- PENDING COLUMN -->
+  <div class="kanban-column"
+       cdkDropList
+       id="pending"
+       [cdkDropListData]="pending"
+       [cdkDropListConnectedTo]="['inprogress','completed']"
+       (cdkDropListDropped)="onDrop($event)">
+
+    <h3>Pending</h3>
+
+    <div *ngFor="let task of pending" cdkDrag>
+      <app-task-card [task]="task"
+                     (edit)="editTask($event)"
+                     (delete)="deleteTask($event)">
+      </app-task-card>
+    </div>
+
+  </div>
+
+  <!-- IN PROGRESS COLUMN -->
+  <div class="kanban-column"
+       cdkDropList
+       id="inprogress"
+       [cdkDropListData]="inprogress"
+       [cdkDropListConnectedTo]="['pending','completed']"
+       (cdkDropListDropped)="onDrop($event)">
+
+    <h3>In Progress</h3>
+
+    <div *ngFor="let task of inprogress" cdkDrag>
+      <app-task-card [task]="task"
+                     (edit)="editTask($event)"
+                     (delete)="deleteTask($event)">
+      </app-task-card>
+    </div>
+
+  </div>
+
+  <!-- COMPLETED COLUMN -->
+  <div class="kanban-column"
+       cdkDropList
+       id="completed"
+       [cdkDropListData]="completed"
+       [cdkDropListConnectedTo]="['pending','inprogress']"
+       (cdkDropListDropped)="onDrop($event)">
+
+    <h3>Completed</h3>
+
+    <div *ngFor="let task of completed" cdkDrag>
+      <app-task-card [task]="task"
+                     (edit)="editTask($event)"
+                     (delete)="deleteTask($event)">
+      </app-task-card>
+    </div>
+
+  </div>
+
+</div>

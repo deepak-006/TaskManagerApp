@@ -1,33 +1,11 @@
-/* ------------------------------------
-   ROOT THEME COLORS (Premium Minimalist)
------------------------------------- */
-:root {
-  --primary: #0d6efd;
-  --primary-hover: #0b5ed7;
-  --primary-light: #eaf2ff;
-  --bg-body: #f7f8fa;
-  --bg-card: #ffffff;
-  --bg-table-header: #f1f2f4;
-  --border: #e5e7eb;
-  --border-dark: #d1d5db;
-  --text-dark: #1f2937;
-  --text-medium: #4b5563;
-  --text-light: #6b7280;
-  --success: #16a34a;
-  --success-light: #e7f7ec;
-  --warning: #f59e0b;
-  --warning-light: #fef6e7;
-  --danger: #dc2626;
-  --danger-light: #fde7e7;
-  --info: #0ea5e9;
-  --info-light: #e8f7ff;
-}
+/* ===================================================
+   ADMIN DASHBOARD — PREMIUM UI MATCHING MAIN DASHBOARD
+=================================================== */
 
-/* ------------------------------------
-   PAGE WRAPPER
------------------------------------- */
+/* Container */
 .admin-container {
   min-height: 100vh;
+  padding: 20px;
   padding-bottom: 40px;
   background: var(--bg-body);
   font-family: "Inter", "Segoe UI", sans-serif;
@@ -35,98 +13,119 @@
 
 /* Header */
 .admin-header h2 {
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text-dark);
 }
 
 .admin-header h5 {
-  color: var(--primary);
   font-weight: 500;
+  color: var(--primary);
 }
 
-/* ------------------------------------
-   SUMMARY CARDS
------------------------------------- */
+/* ============================================
+   SUMMARY CARDS (MATCHING TASK DASHBOARD STYLE)
+============================================ */
 .summary-card {
   background: var(--bg-card);
-  border-radius: 12px;
   border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px;
   cursor: pointer;
-  transition: all 0.22s ease;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+  text-align: center;
 }
 
   .summary-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
     border-color: var(--primary);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.05);
-    transform: translateY(-3px);
   }
 
+  /* Icons inside cards */
   .summary-card i {
-    font-size: 2rem;
+    font-size: 2.4rem;
     color: var(--primary);
   }
 
   .summary-card h5 {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     font-weight: 600;
     margin-top: 10px;
+    color: var(--text-dark);
   }
 
   .summary-card p {
     margin: 0;
-    font-size: 1.4rem;
-    font-weight: 600;
-    color: var(--text-dark);
+    margin-top: 8px;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-medium);
   }
 
-/* Active card highlight */
+/* Active Card */
 .active-card {
   background: var(--primary-light);
   border-color: var(--primary);
-  box-shadow: 0 0 12px rgba(13,110,253,0.25);
+  box-shadow: 0 0 15px rgba(13,110,253,0.25);
 }
 
-/* ------------------------------------
-   CARDS (Tables, Forms)
------------------------------------- */
+/* ============================================
+   CARDS FOR TABLES & FORMS
+============================================ */
 .card {
+  border-radius: 18px;
   background: var(--bg-card);
-  border-radius: 12px;
   border: 1px solid var(--border);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
-/* ------------------------------------
-   TABLES
------------------------------------- */
-.table thead {
-  background: var(--bg-table-header);
-}
-
-.table th {
+/* Card headings */
+.card-body h5 {
   font-weight: 600;
   color: var(--text-dark);
+}
+
+/* ============================================
+   TABLE UI — MODERN CLEAN DESIGN
+============================================ */
+
+/* Table Header */
+table thead {
+  background: var(--bg-table-header);
+  border-bottom: 2px solid var(--border-dark);
+}
+
+table th {
+  padding: 14px 10px;
+  font-weight: 700;
+  color: var(--text-dark);
   font-size: 0.95rem;
+  letter-spacing: .3px;
 }
 
-.table td {
+/* Table Body */
+table td {
+  padding: 13px 10px;
   color: var(--text-medium);
-  font-size: 0.92rem;
+  font-size: 0.93rem;
+  vertical-align: middle;
 }
 
+/* Hover Row */
 .table-hover tbody tr:hover {
-  background: #f6f8fa;
+  background: var(--primary-light);
+  transition: 0.15s;
 }
 
-/* ------------------------------------
-   FILTER SELECTS
------------------------------------- */
+/* ============================================
+   FILTER INPUTS
+============================================ */
 .form-select,
 .form-control {
+  border-radius: 10px;
   border: 1px solid var(--border-dark);
-  padding: 0.45rem 0.6rem;
-  border-radius: 7px;
-  background: #fff;
-  color: var(--text-medium);
+  padding: 0.55rem 0.75rem;
+  color: var(--text-dark);
 }
 
   .form-select:focus,
@@ -135,14 +134,56 @@
     box-shadow: 0 0 0 3px rgba(13,110,253,0.15);
   }
 
-/* ------------------------------------
-   BUTTONS
------------------------------------- */
-button {
-  border-radius: 8px !important;
+
+/* ============================================
+   BADGES (ROLES & STATUS)
+============================================ */
+.role-badge,
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: inline-block;
 }
 
-/* Primary Button */
+  /* Roles */
+  .role-badge.user {
+    background: #f1f3f5;
+    color: var(--text-medium);
+  }
+
+  .role-badge.admin {
+    background: var(--primary-light);
+    color: var(--primary);
+  }
+
+  /* Status */
+  .status-badge.completed {
+    background: var(--success-light);
+    color: var(--success);
+  }
+
+  .status-badge.pending {
+    background: var(--warning-light);
+    color: var(--warning);
+  }
+
+  .status-badge.inprogress {
+    background: var(--info-light);
+    color: var(--info);
+  }
+
+
+/* ============================================
+   BUTTONS —  Smoother Premium Buttons
+============================================ */
+button {
+  border-radius: 10px !important;
+  padding: 7px 14px;
+  font-weight: 500;
+}
+
 .btn-primary {
   background: var(--primary);
   border: none;
@@ -152,17 +193,23 @@ button {
     background: var(--primary-hover);
   }
 
-/* Outline */
-.btn-outline-secondary {
-  border-color: var(--border-dark);
-  color: var(--text-medium);
+.btn-warning {
+  background: var(--warning);
 }
 
-  .btn-outline-secondary:hover {
-    background: #ececec;
+  .btn-warning:hover {
+    background: #d97706;
   }
 
-/* Pagination */
+.btn-danger {
+  background: var(--danger);
+}
+
+  .btn-danger:hover {
+    background: #b91c1c;
+  }
+
+/* pagination buttons */
 .btn-outline-primary {
   border-color: var(--primary);
   color: var(--primary);
@@ -172,78 +219,14 @@ button {
     background: var(--primary-light);
   }
 
-/* Danger */
-.btn-danger {
-  background: var(--danger);
-  color: #fff;
-}
-
-  .btn-danger:hover {
-    background: #b91c1c;
-  }
-
-/* Warning */
-.btn-warning {
-  background: var(--warning);
-  color: #fff;
-}
-
-  .btn-warning:hover {
-    background: #d97706;
-  }
-
-/* ------------------------------------
-   BADGES (Modern Minimal Style)
------------------------------------- */
-.role-badge,
-.status-badge {
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.78rem;
-  font-weight: 500;
-  display: inline-block;
-  border: 1px solid transparent;
-}
-
-  /* User Roles */
-  .role-badge.admin {
-    background: var(--primary-light);
-    color: var(--primary);
-    border-color: #c9ddff;
-  }
-
-  .role-badge.user {
-    background: #f3f4f6;
-    color: var(--text-medium);
-    border-color: var(--border-dark);
-  }
-
-  /* Task Status */
-  .status-badge.completed {
-    background: var(--success-light);
-    color: var(--success);
-    border-color: #b6e7c2;
-  }
-
-  .status-badge.pending {
-    background: var(--warning-light);
-    color: var(--warning);
-    border-color: #f1d199;
-  }
-
-  .status-badge.inprogress {
-    background: var(--info-light);
-    color: var(--info);
-    border-color: #bfeaff;
-  }
-
-/* ------------------------------------
+/* ============================================
    LOGS
------------------------------------- */
+============================================ */
 .list-group-item {
+  background: transparent;
   border: none;
   border-bottom: 1px solid var(--border);
-  background: transparent;
+  padding: 12px 0;
 }
 
   .list-group-item span {
@@ -254,11 +237,12 @@ button {
     color: var(--text-light);
   }
 
-/* ------------------------------------
+/* ============================================
    RESPONSIVE
------------------------------------- */
+============================================ */
 @media (max-width: 576px) {
-  h2 {
-    font-size: 1.25rem;
+  .summary-card p {
+    font-size: 1.2rem;
   }
 }
+
